@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_maker/services/auth.dart';
 import 'package:quiz_maker/views/signin.dart';
 
 import '../widgets/widgets.dart';
+import 'home.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -14,6 +16,26 @@ class _SignUpState extends State<SignUp> {
 
   final _formKey = GlobalKey<FormState>();
   late String name, email, password;
+  AuthService authService = AuthService();
+  bool isLoading = false;
+
+
+  signUp() async {
+    if(_formKey.currentState!.validate()){
+      setState(() {
+        isLoading = true;
+      });
+      await authService.signUp(name, email, password)
+          .then((value) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => Home()));
+      });
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +44,12 @@ class _SignUpState extends State<SignUp> {
         title: appBar(context),
         centerTitle: true,
       ),
-      body: Form(
+      body: isLoading ?
+      Container(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ) : Form(
         key: _formKey,
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 24),
@@ -56,11 +83,12 @@ class _SignUpState extends State<SignUp> {
               ),
               SizedBox(height: 6,),
               TextFormField(
+                obscureText: true,
                 validator: (val) {
                   return val!.isEmpty ?
                   "Enter correct email" : null;
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     hintText: "Password"
                 ),
                 onChanged: (val) {
@@ -70,7 +98,7 @@ class _SignUpState extends State<SignUp> {
               SizedBox(height: 24,),
               GestureDetector(
                 onTap: () {
-
+                  signUp();
                 },
                 child: Container(
                   // height: 50,
