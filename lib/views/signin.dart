@@ -88,19 +88,7 @@ import 'package:quiz_maker/widgets/widgets.dart';
                   onTap: (){
                     signIn();
                   },
-                  child: Container(
-                    // height: 50,
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(30)
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Sign in",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
+                  child: blueButton(context: context, label: "Sign In"),
                 ),
                 SizedBox(height: 18),
                 Row(
