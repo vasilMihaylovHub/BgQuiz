@@ -62,6 +62,7 @@ class _AddQuestionState extends State<AddQuestion> {
     return Scaffold(
       appBar: AppBar(
         title: appBar(context),
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: const IconThemeData(color: Colors.black),

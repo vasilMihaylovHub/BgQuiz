@@ -25,10 +25,15 @@ import 'package:quiz_maker/widgets/widgets.dart';
           isLoading = true;
         });
         await authService.signIn(email, password)
-        .then((value) {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => Home()));
-                });
+        .then((user) {
+          if(user != null) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => Home()));
+          }else{
+            //pokaji messieage che ne e eok parolata
+          }
+          });
+
 
         setState(() {
           isLoading = false;

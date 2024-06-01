@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:quiz_maker/services/auth.dart';
 import 'package:quiz_maker/services/database.dart';
 import 'package:quiz_maker/views/create_quiz.dart';
+import 'package:quiz_maker/views/signin.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
 class Home extends StatefulWidget {
@@ -14,6 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late Future<List<Map<String, dynamic>>> quizzesFuture;
   DatabaseService databaseService = DatabaseService();
+  AuthService authService = AuthService();
 
   @override
   void initState() {
@@ -60,8 +63,15 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: appBar(context),
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, size: 30),
+            onPressed: () { signOut(); },
+          ),
+        ],
       ),
       body: quizList(),
       floatingActionButton: FloatingActionButton(
@@ -77,6 +87,17 @@ class _HomeState extends State<Home> {
         },
       ),
     );
+  }
+
+  void signOut() {
+    authService.signOut().then((val){
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) =>
+          const SignIn()
+        )
+      );
+
+    });
   }
 }
 

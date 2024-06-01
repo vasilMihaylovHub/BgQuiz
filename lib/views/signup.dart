@@ -20,15 +20,17 @@ class _SignUpState extends State<SignUp> {
   bool isLoading = false;
 
 
-  signUp() async {
+  signUp() {
     if(_formKey.currentState!.validate()){
       setState(() {
         isLoading = true;
       });
-      await authService.signUp(name, email, password)
-          .then((value) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => Home()));
+      authService.signUp(name, email, password)
+          .then((user) {
+            if(user != null) {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => Home()));
+            }
       });
 
       setState(() {
