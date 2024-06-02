@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/services/auth.dart';
 import 'package:quiz_maker/services/database.dart';
+import 'package:quiz_maker/views/add_question.dart';
 import 'package:quiz_maker/views/create_quiz.dart';
 import 'package:quiz_maker/views/play_quiz.dart';
 import 'package:quiz_maker/views/signin.dart';
@@ -41,7 +42,7 @@ class _HomeState extends State<Home> {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('No quizzes available'));
+          return const Center(child: Text('Все още няма тестове. Бъди първия'));
         } else {
           var quizzes = snapshot.data!;
           return ListView.builder(
@@ -58,6 +59,12 @@ class _HomeState extends State<Home> {
                 () {
                   deleteQuiz(quiz.id);
                 },
+                  (){
+                    Navigator.push(
+                        context, MaterialPageRoute(
+                        builder: (context) => AddQuestion(quizId: quiz.id))
+                    );
+                  }
               );
             },
           );
@@ -121,9 +128,10 @@ class QuizTitle extends StatelessWidget {
   final String quizId;
   final bool canDelete;
   final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
   QuizTitle(this.imgUrl, this.title, this.desc, this.quizId, this.canDelete,
-      this.onDelete);
+      this.onDelete, this.onEdit);
 
   @override
   Widget build(BuildContext context) {
@@ -150,14 +158,21 @@ class QuizTitle extends StatelessWidget {
               child: Text(desc),
             ),
             if (canDelete)
-              Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  icon: const Icon(Icons.delete),
-                  color: Colors.red.shade900,
-                  onPressed: onDelete,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: onEdit,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    color: Colors.red.shade900,
+                    onPressed: onDelete,
+                  ),
+                ],
               ),
+
           ],
         ),
       ),

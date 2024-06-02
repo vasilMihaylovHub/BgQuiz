@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 Widget appBar(BuildContext context){
   return RichText(
     text: const TextSpan(
-      style: TextStyle(fontSize: 24),
+      style: TextStyle(fontSize: 26),
       children: <TextSpan>[
         TextSpan(text: 'Bg', style: TextStyle(fontWeight: FontWeight.w500,
         color: Colors.black)),
