@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_maker/common/constants.dart';
 import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/services/database.dart';
 import 'package:quiz_maker/services/auth.dart';
@@ -34,20 +35,18 @@ class _CreateQuizState extends State<CreateQuiz> {
       final newQuiz = Quiz(
         id: quizId,
         name: quizTitle,
-        imgUrl: /*quizImgUrl*/ "https://www.connetweb.com/wp-content/uploads/2021/06/canstockphoto22402523-arcos-creator.com_-1024x1024-1.jpg",
+        imgUrl: quizImgUrl,
         description: quizDesc,
-        creatorEmail: currentUser?.email ?? "mail@not.found",
+        creatorEmail: currentUser?.email ?? Constants.defaultMail,
       );
-      await databaseService.createQuiz(newQuiz)
+      databaseService.createQuiz(newQuiz)
       .then((creationSuccess) {
+
         if(creationSuccess) {
-          setState(() {
-            isLoading = false;
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(
-                builder: (context) => AddQuestion(quizId: quizId))
-            );
-          });
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(
+              builder: (context) => AddQuestion(quizId: quizId))
+          );
         } else{
           setState(() {
             isLoading = false;
@@ -56,11 +55,13 @@ class _CreateQuizState extends State<CreateQuiz> {
               const SnackBar(content: Text('Неуспешно създаван на тест. Моля опитайте отново'))
           );
         }
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(content: Text('Неуспешно създаван на тест. Моля опитайте отново'))
-        // );
       });
+      Navigator.pushReplacement(
+        context, MaterialPageRoute(
+        builder: (context) => AddQuestion(quizId: quizId))
+    );
     }
+
   }
 
   @override

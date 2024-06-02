@@ -6,6 +6,7 @@ import 'package:quiz_maker/views/create_quiz.dart';
 import 'package:quiz_maker/views/signin.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
+import '../common/constants.dart';
 import '../common/functions.dart';
 
 class Home extends StatefulWidget {
@@ -50,7 +51,7 @@ class _HomeState extends State<Home> {
                 quiz.imgUrl,
                 quiz.name,
                 quiz.description,
-                quiz.creatorEmail == currentUserEmail,
+                [currentUserEmail, Constants.defaultMail].contains(quiz.creatorEmail),
                     () {
                   deleteQuiz(quiz.id);
                 },
@@ -141,7 +142,7 @@ class QuizTitle extends StatelessWidget {
             Align(
               alignment: Alignment.topRight,
               child: IconButton(
-                icon: Icon(Icons.delete),
+                icon: const Icon(Icons.delete),
                 onPressed: onDelete,
               ),
             ),
