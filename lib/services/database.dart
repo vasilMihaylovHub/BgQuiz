@@ -41,7 +41,7 @@ class DatabaseService {
 
     QuerySnapshot querySnapshot = await _db
         .collection('questions')
-        // .where('quizId', isEqualTo: quizId) need to be adde
+        .where('quizId', isEqualTo: quizId)
         .get();
     return querySnapshot.docs.map((doc) {
       return Question(

@@ -21,6 +21,7 @@ class Question {
 
   Map<String, dynamic> toJson() {
     return {
+      'quizId': quizId,
       'question': question,
       'option1': option1,
       'option2': option2,
