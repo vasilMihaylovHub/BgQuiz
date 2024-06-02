@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/services/database.dart';
 import 'package:quiz_maker/services/auth.dart';
-import 'package:quiz_maker/views/home.dart';
 import 'package:uuid/uuid.dart';
 
 import '../widgets/widgets.dart';
+import 'add_question.dart';
 
 class CreateQuiz extends StatefulWidget {
   const CreateQuiz({super.key});
@@ -34,19 +34,31 @@ class _CreateQuizState extends State<CreateQuiz> {
       final newQuiz = Quiz(
         id: quizId,
         name: quizTitle,
-        imgUrl: quizImgUrl,
+        imgUrl: /*quizImgUrl*/ "https://www.connetweb.com/wp-content/uploads/2021/06/canstockphoto22402523-arcos-creator.com_-1024x1024-1.jpg",
         description: quizDesc,
         creatorEmail: currentUser?.email ?? "mail@not.found",
       );
-      databaseService.createQuiz(newQuiz).then((val) {
-        setState(() {
-          isLoading = false;
-        });
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Home()));
-        /*print('Quiz created with ID: $quizId');
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => AddQuestion(quizId: quizId)));*/
+      await databaseService.createQuiz(newQuiz)
+      .then((creationSuccess) {
+        if(creationSuccess) {
+          setState(() {
+            isLoading = false;
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(
+                builder: (context) => AddQuestion(quizId: quizId))
+            );
+          });
+        } else{
+          setState(() {
+            isLoading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Неуспешно създаван на тест. Моля опитайте отново'))
+          );
+        }
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //     const SnackBar(content: Text('Неуспешно създаван на тест. Моля опитайте отново'))
+        // );
       });
     }
   }

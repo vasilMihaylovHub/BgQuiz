@@ -4,6 +4,8 @@ import 'package:quiz_maker/views/home.dart';
 import 'package:quiz_maker/views/signup.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
+import '../common/functions.dart';
+
   class SignIn extends StatefulWidget {
     const SignIn({super.key});
 
@@ -27,10 +29,13 @@ import 'package:quiz_maker/widgets/widgets.dart';
         await authService.signIn(email, password)
         .then((user) {
           if(user != null) {
+            HelperFunctions.saveCurrentUser(isLoggedIn: true);
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => Home()));
-          }else{
-            //pokaji messieage che ne e eok parolata
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Неуспешно влизане. Моля опитайте отново'))
+            );
           }
           });
 

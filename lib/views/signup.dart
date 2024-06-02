@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quiz_maker/services/auth.dart';
 import 'package:quiz_maker/views/signin.dart';
 
+import '../common/functions.dart';
 import '../widgets/widgets.dart';
 import 'home.dart';
 
@@ -28,6 +29,7 @@ class _SignUpState extends State<SignUp> {
       authService.signUp(name, email, password)
           .then((user) {
             if(user != null) {
+              HelperFunctions.saveCurrentUser(isLoggedIn: true);
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => Home()));
             }

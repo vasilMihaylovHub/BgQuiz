@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:quiz_maker/views/home.dart';
 import 'package:uuid/uuid.dart';
 
-import '../models/Question.dart';
+import '../models/question.dart';
 import '../services/database.dart';
 import '../widgets/widgets.dart';
 
 class AddQuestion extends StatefulWidget {
-
   final String quizId;
+
   const AddQuestion({super.key, required this.quizId});
 
   @override
@@ -27,17 +27,16 @@ class _AddQuestionState extends State<AddQuestion> {
 
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const Home()));
-
   }
-
 
   void processToNextQuestion() {
     uploadQuestion();
 
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => AddQuestion(quizId: widget.quizId)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => AddQuestion(quizId: widget.quizId)));
   }
-
 
   uploadQuestion() {
     if (_formKey.currentState?.validate() == true) {
@@ -54,10 +53,10 @@ class _AddQuestionState extends State<AddQuestion> {
         option3: option3,
         option4: option4,
       );
-      databaseService.addQuestion(questionForSave)
-          .then((val) {});
-      setState(() {
-        isLoading = false;
+      databaseService.addQuestion(questionForSave).then((val) {
+        setState(() {
+          isLoading = false;
+        });
       });
     }
   }
@@ -131,31 +130,32 @@ class _AddQuestionState extends State<AddQuestion> {
                       },
                     ),
                     const Spacer(),
-                    Row(
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              saveQuiz();
-                            },
-                            child: blueButton(context: context,
-                                label:  "Запази теста",
-                                buttonWidth: MediaQuery.of(context).size.width/2 - 48
-                            )
-                        ),
-                        const SizedBox(width: 24,),
-                        GestureDetector(
-                            onTap: () {
-                              processToNextQuestion();
-                            },
-                            child: blueButton(context: context,
-                                label:  "Добави въпрос",
-                                buttonWidth: MediaQuery.of(context).size.width/2 - 48
-                            )
-                        ),
-
-                      ]
-                    ),
-                    const SizedBox(height: 60,)
+                    Row(children: [
+                      GestureDetector(
+                          onTap: () {
+                            saveQuiz();
+                          },
+                          child: blueButton(
+                              context: context,
+                              label: "Запази теста",
+                              buttonWidth:
+                                  MediaQuery.of(context).size.width / 2 - 48)),
+                      const SizedBox(
+                        width: 24,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            processToNextQuestion();
+                          },
+                          child: blueButton(
+                              context: context,
+                              label: "Добави въпрос",
+                              buttonWidth:
+                                  MediaQuery.of(context).size.width / 2 - 48)),
+                    ]),
+                    const SizedBox(
+                      height: 60,
+                    )
                   ],
                 ),
               ),

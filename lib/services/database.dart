@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/Question.dart';
+import '../models/question.dart';
 import '../models/quiz.dart';
 
 class DatabaseService {
@@ -14,12 +14,13 @@ class DatabaseService {
     });
   }
 
-  Future<void> createQuiz(Quiz quiz) {
+  Future<bool> createQuiz(Quiz quiz) async {
     try {
-      return _db.collection('quizzes').doc(quiz.id).set(quiz.toJson());
+      await _db.collection('quizzes').doc(quiz.id).set(quiz.toJson());
+      return true;
     } catch (e) {
       print(e.toString());
-      return Future.value(null);
+      return false;
     }
   }
 
@@ -28,16 +29,14 @@ class DatabaseService {
   }
 
   Future<void> addQuestion(Question question) async {
-    return _db
-        .collection('questions')
-        .doc(question.id)
-        .set(question.toJson());
+    return _db.collection('questions').doc(question.id).set(question.toJson());
   }
 
-
   Future<List<Question>> getQuestionsForQuiz(String quizId) async {
-    QuerySnapshot querySnapshot = await _db.collection('questions').where(
-        'quizId', isEqualTo: quizId).get();
+    QuerySnapshot querySnapshot = await _db
+        .collection('questions')
+        .where('quizId', isEqualTo: quizId)
+        .get();
     return querySnapshot.docs.map((doc) {
       return Question(
         id: doc.id,

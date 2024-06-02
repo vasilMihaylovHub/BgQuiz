@@ -6,6 +6,8 @@ import 'package:quiz_maker/views/create_quiz.dart';
 import 'package:quiz_maker/views/signin.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
+import '../common/functions.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -98,6 +100,7 @@ class _HomeState extends State<Home> {
 
   void signOut() {
     authService.signOut().then((val) {
+      HelperFunctions.saveCurrentUser(isLoggedIn: false);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const SignIn()),
