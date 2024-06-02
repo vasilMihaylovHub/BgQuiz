@@ -41,7 +41,6 @@ class _CreateQuizState extends State<CreateQuiz> {
       );
       databaseService.createQuiz(newQuiz)
       .then((creationSuccess) {
-
         if(creationSuccess) {
           Navigator.pushReplacement(
               context, MaterialPageRoute(
@@ -80,19 +79,19 @@ class _CreateQuizState extends State<CreateQuiz> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(hintText: "Quiz Image URL"),
+                decoration: InputDecoration(hintText: "Профилна снимка, URL"),
                 onChanged: (val) {
                   quizImgUrl = val;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: "Quiz Title"),
+                decoration: InputDecoration(hintText: "Заглавие"),
                 onChanged: (val) {
                   quizTitle = val;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: "Quiz Description"),
+                decoration: InputDecoration(hintText: "Описание"),
                 onChanged: (val) {
                   quizDesc = val;
                 },
@@ -102,7 +101,7 @@ class _CreateQuizState extends State<CreateQuiz> {
                   onTap: () {
                     createQuiz();
                   },
-                  child: blueButton(context: context,label: "Create Quiz")
+                  child: blueButton(context: context,label: "Създай")
               ),
               const SizedBox(height: 60)
             ],

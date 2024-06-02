@@ -63,10 +63,10 @@ class _SignUpState extends State<SignUp> {
               TextFormField(
                 validator: (val) {
                   return val!.isEmpty ?
-                  "Enter your name" : null;
+                  "Полето е задължително" : null;
                 },
                 decoration: InputDecoration(
-                    hintText: "Name"
+                    hintText: "Име"
                 ),
                 onChanged: (val) {
                   name = val;
@@ -76,10 +76,10 @@ class _SignUpState extends State<SignUp> {
               TextFormField(
                 validator: (val) {
                   return val!.isEmpty ?
-                  "Enter correct email" : null;
+                  "Полето е задължително" : null;
                 },
                 decoration: InputDecoration(
-                    hintText: "Email"
+                    hintText: "Емайл"
                 ),
                 onChanged: (val) {
                   email = val;
@@ -90,10 +90,10 @@ class _SignUpState extends State<SignUp> {
                 obscureText: true,
                 validator: (val) {
                   return val!.isEmpty ?
-                  "Enter correct email" : null;
+                  "Полето е задължително" : null;
                 },
                 decoration: const InputDecoration(
-                    hintText: "Password"
+                    hintText: "Парола"
                 ),
                 onChanged: (val) {
                   password = val;
@@ -104,13 +104,13 @@ class _SignUpState extends State<SignUp> {
                 onTap: () {
                   signUp();
                 },
-                child: blueButton(context: context,label: "Sign Up"),
+                child: blueButton(context: context,label: "Регистрирай"),
               ),
               SizedBox(height: 18),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("If you have an account? ",
+                  Text("Вече си регистриран? ",
                     style: TextStyle(fontSize: 16),),
                   GestureDetector(
                       onTap: () {
@@ -118,7 +118,7 @@ class _SignUpState extends State<SignUp> {
                             MaterialPageRoute(builder: (context) => SignIn()
                             ));
                       },
-                      child: Text("Sign In", style: TextStyle(
+                      child: Text("Влез", style: TextStyle(
                           fontSize: 16, decoration: TextDecoration.underline)))
                 ],
               ),

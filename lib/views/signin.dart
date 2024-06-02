@@ -56,24 +56,22 @@ import '../common/functions.dart';
           centerTitle: true,
         ),
         body: isLoading ?
-        Container(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
+        const Center(
+          child: CircularProgressIndicator(),
         ) : Form(
           key: _formKey,
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 24),
             child: Column(
               children: [
-                Spacer(),
+                const Spacer(),
                 TextFormField(
                   validator: (val){
                     return val!.isEmpty ?
-                    "Enter correct email" : null;
+                    "Полето е задължително" : null;
                   },
-                  decoration: InputDecoration(
-                    hintText: "Email"
+                  decoration: const InputDecoration(
+                    hintText: "Емайл"
                   ),
                   onChanged: (val){
                     email = val;
@@ -84,10 +82,10 @@ import '../common/functions.dart';
                   obscureText: true,
                   validator: (val){
                     return val!.isEmpty ?
-                    "Enter password" : null;
+                    "Полето е задължително" : null;
                   },
                   decoration: InputDecoration(
-                      hintText: "Password"
+                      hintText: "Парола"
                   ),
                   onChanged: (val){
                     password = val;
@@ -98,20 +96,20 @@ import '../common/functions.dart';
                   onTap: (){
                     signIn();
                   },
-                  child: blueButton(context: context, label: "Sign In"),
+                  child: blueButton(context: context, label: "Влез"),
                 ),
                 SizedBox(height: 18),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don't have an account? ", style: TextStyle(fontSize: 16),),
+                    Text("Нямаш регистрация? ", style: TextStyle(fontSize: 16),),
                     GestureDetector(
                         onTap: (){
                           Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) => SignUp())
                           );
                         },
-                        child: Text("Sign up", style: TextStyle(fontSize: 16, decoration: TextDecoration.underline)
+                        child: Text("Регистрация", style: TextStyle(fontSize: 16, decoration: TextDecoration.underline)
                         )
                     )
                   ],

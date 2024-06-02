@@ -82,7 +82,7 @@ class _AddQuestionState extends State<AddQuestion> {
                 child: Column(
                   children: [
                     TextFormField(
-                      decoration: const InputDecoration(hintText: "Question"),
+                      decoration: const InputDecoration(hintText: "Въпрос"),
                       onChanged: (val) {
                         question = val;
                       },
@@ -114,7 +114,7 @@ class _AddQuestionState extends State<AddQuestion> {
                       height: 6,
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(hintText: "Опция trie"),
+                      decoration: const InputDecoration(hintText: "Опция три"),
                       onChanged: (val) {
                         option3 = val;
                       },
