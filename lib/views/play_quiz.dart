@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/models/question.dart';
+import 'package:quiz_maker/models/result_model.dart';
 import 'package:quiz_maker/services/database.dart';
+import 'package:quiz_maker/views/results.dart';
 import 'package:quiz_maker/widgets/quiz_play_widget.dart';
 
 import '../widgets/widgets.dart';
@@ -17,10 +19,9 @@ class PlayQuiz extends StatefulWidget {
 class _PlayQuizState extends State<PlayQuiz> {
   DatabaseService _db = DatabaseService();
   List<Question> _questions = [];
-  int _notAttempted = 0;
   int _correct = 0;
-  int _incorrect = 0;
-  int _total = 0;
+  int _incorrct = 0;
+  int _notAttempted = 0;
 
   @override
   void initState() {
@@ -28,10 +29,7 @@ class _PlayQuizState extends State<PlayQuiz> {
       print("Questions are:  ${val.length}.");
       setState(() {
         _questions = val;
-        _notAttempted = 0;
-        _correct = 0;
-        _incorrect = 0;
-        _total = _questions.length;
+        _notAttempted = val.length;
       });
     });
     super.initState();
@@ -65,12 +63,27 @@ class _PlayQuizState extends State<PlayQuiz> {
                       return QuizOptions(
                         question: QuestionModel(_questions[index]),
                         index: index,
+                        onOptionSelected: (bool isCorrect) {
+                          _notAttempted--;
+                          isCorrect ? _correct++ : _incorrct;
+                        },
                       );
                     },
                   ),
                 ),
               ],
             ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.check),
+        backgroundColor: Colors.blue,
+        onPressed: (){
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) =>
+                  Results(result: ResultModel(_correct, _incorrct, _notAttempted, _questions.length))
+              )
+          );
+        },
+      ),
     );
   }
 }
@@ -78,8 +91,9 @@ class _PlayQuizState extends State<PlayQuiz> {
 class QuizOptions extends StatefulWidget {
   final QuestionModel question;
   final int index;
+  final ValueChanged<bool> onOptionSelected;
 
-  const QuizOptions({super.key, required this.question, required this.index});
+  const QuizOptions({super.key, required this.question, required this.index, required this.onOptionSelected});
 
   @override
   State<QuizOptions> createState() => _QuizOptionsState();
@@ -136,12 +150,9 @@ class _QuizOptionsState extends State<QuizOptions> {
     if (!widget.question.answered) {
       widget.question.answered = true;
       optionSelected = option;
-      if (widget.question.correctOption == option) {
-        // _correct = _correct++
-      } else {
-        //_incorrct++
-      }
+      bool isCorrect = widget.question.correctOption == option;
+      widget.onOptionSelected(isCorrect);
+      setState(() {});
     }
-    setState(() {});
   }
 }
