@@ -1,3 +1,4 @@
+import 'dart:math';
 
 class Question {
   String id;
@@ -26,5 +27,24 @@ class Question {
       'option3': option3,
       'option4': option4,
     };
+  }
+}
+
+class QuestionModel {
+  String question;
+  String correctOption;
+  List<String> options;
+  bool answered = false;
+
+  QuestionModel(Question question)
+      : question = question.question,
+        correctOption = question.option1,
+        options = [
+          question.option1,
+          question.option2,
+          question.option3,
+          question.option4,
+        ] {
+    options.shuffle(Random());
   }
 }

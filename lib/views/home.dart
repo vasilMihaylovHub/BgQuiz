@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/services/auth.dart';
 import 'package:quiz_maker/services/database.dart';
-import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/views/create_quiz.dart';
+import 'package:quiz_maker/views/play_quiz.dart';
 import 'package:quiz_maker/views/signin.dart';
-import 'package:quiz_maker/views/solve_quiz.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
 import '../common/constants.dart';
@@ -53,8 +53,9 @@ class _HomeState extends State<Home> {
                 quiz.name,
                 quiz.description,
                 quiz.id,
-                [currentUserEmail, Constants.defaultMail].contains(quiz.creatorEmail),
-                    () {
+                [currentUserEmail, Constants.defaultMail]
+                    .contains(quiz.creatorEmail),
+                () {
                   deleteQuiz(quiz.id);
                 },
               );
@@ -121,16 +122,15 @@ class QuizTitle extends StatelessWidget {
   final bool canDelete;
   final VoidCallback onDelete;
 
-  QuizTitle(this.imgUrl, this.title, this.desc, this.quizId, this.canDelete, this.onDelete);
+  QuizTitle(this.imgUrl, this.title, this.desc, this.quizId, this.canDelete,
+      this.onDelete);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigator.push(
-            context, MaterialPageRoute(
-            builder: (context) => QuizSolvingScreen(quizId: quizId))
-        );
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => PlayQuiz(quizId: quizId)));
       },
       child: Card(
         margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),

@@ -15,6 +15,8 @@ class DatabaseService {
   }
 
   Future<bool> createQuiz(Quiz quiz) async {
+    print("Create quiz ${quiz.toString()}");
+
     try {
       await _db.collection('quizzes').doc(quiz.id).set(quiz.toJson());
       return true;
@@ -25,17 +27,21 @@ class DatabaseService {
   }
 
   Future<void> deleteQuiz(String quizId) {
+    print("Delete quiz $quizId");
     return _db.collection('quizzes').doc(quizId).delete();
   }
 
   Future<void> addQuestion(Question question) async {
+    print("Add question ${question.toString()}");
     return _db.collection('questions').doc(question.id).set(question.toJson());
   }
 
   Future<List<Question>> getQuestionsForQuiz(String quizId) async {
+    print("getQuestionsForQuiz $quizId");
+
     QuerySnapshot querySnapshot = await _db
         .collection('questions')
-        .where('quizId', isEqualTo: quizId)
+        // .where('quizId', isEqualTo: quizId) need to be adde
         .get();
     return querySnapshot.docs.map((doc) {
       return Question(
