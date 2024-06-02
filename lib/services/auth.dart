@@ -1,7 +1,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quiz_maker/common/constants.dart';
-import '';
 
 class AuthService {
 
@@ -14,6 +13,7 @@ class AuthService {
     } catch(e) {
       print(e.toString());
     }
+    return null;
   }
 
   Future signUp(String name, String email, String password) async {
@@ -34,6 +34,10 @@ class AuthService {
     }
   }
 
+
+  Future<User?> getCurrentUser() async {
+    return _auth.currentUser;
+  }
 
 
 

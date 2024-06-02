@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/views/home.dart';
+import 'package:uuid/uuid.dart';
 
+import '../models/Question.dart';
 import '../services/database.dart';
 import '../widgets/widgets.dart';
 
@@ -18,6 +20,7 @@ class _AddQuestionState extends State<AddQuestion> {
   late String question, option1, option2, option3, option4;
   DatabaseService databaseService = DatabaseService();
   bool isLoading = false;
+  Uuid _uuid = Uuid();
 
   saveQuiz() {
     uploadQuestion();
@@ -41,16 +44,18 @@ class _AddQuestionState extends State<AddQuestion> {
       setState(() {
         isLoading = true;
       });
-      Map<String, String> questionMap = {
-        "question": question,
-        "option1": option1,
-        "option2": option2,
-        "option3": option3,
-        "option4": option4,
-      };
-      databaseService.addQuestionToQuiz(widget.quizId, questionMap).then((quizId) {
 
-      });
+      Question questionForSave = Question(
+        id: _uuid.v4(),
+        quizId: widget.quizId,
+        question: question,
+        option1: option1,
+        option2: option2,
+        option3: option3,
+        option4: option4,
+      );
+      databaseService.addQuestion(questionForSave)
+          .then((val) {});
       setState(() {
         isLoading = false;
       });

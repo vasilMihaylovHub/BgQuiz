@@ -1,47 +1,53 @@
-import 'package:quiz_maker/common/constants.dart';
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../models/Question.dart';
+import '../models/quiz.dart';
+
 class DatabaseService {
-  final List<Map<String, dynamic>> _quizzes = [];
-  int _quizCounter = 0;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<String> addQuizData(Map<String, String> quizData) async {
-    await Future.delayed(const Duration(seconds: Constants.databaseResponseTimeSeconds));
-
-    String quizId = 'quizID${_quizCounter++}';
-    quizData['quizId'] = quizId;
-    _quizzes.add({
-      'quizData': quizData,
-      'questions': <Map<String, String>>[],
+  Stream<List<Quiz>> getQuizzesStream() {
+    return _db.collection('quizzes').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) => Quiz.fromFirestore(doc)).toList();
     });
-    return quizId;
   }
 
-  Future<void> addQuestionToQuiz(String quizId, Map<String, String> questionData) async {
-    await Future.delayed(const Duration(seconds: Constants.databaseResponseTimeSeconds));
+  Future<void> createQuiz(Quiz quiz) {
     try {
-      for (var quiz in _quizzes) {
-        if (quiz['quizData']['quizId'] == quizId) {
-          (quiz['questions'] as List<Map<String, String>>).add(questionData);
-          return;
-        }
-      }
+      return _db.collection('quizzes').doc(quiz.id).set(quiz.toJson());
     } catch (e) {
       print(e.toString());
-      throw Exception('Quiz not found');
+      return Future.value(null);
     }
   }
 
-  Future<List<Map<String, dynamic>>> getQuizzes() async {
-    await Future.delayed(const Duration(seconds: Constants.databaseResponseTimeSeconds));
-
-    return _quizzes;
+  Future<void> deleteQuiz(String quizId) {
+    return _db.collection('quizzes').doc(quizId).delete();
   }
 
-  Stream<List<Map<String, dynamic>>> getQuizzesSteam()  {
-
-    return Stream.fromFuture(getQuizzes());
+  Future<void> addQuestion(Question question) async {
+    return _db
+        .collection('questions')
+        .doc(question.id)
+        .set(question.toJson());
   }
 
 
+  Future<List<Question>> getQuestionsForQuiz(String quizId) async {
+    QuerySnapshot querySnapshot = await _db.collection('questions').where(
+        'quizId', isEqualTo: quizId).get();
+    return querySnapshot.docs.map((doc) {
+      return Question(
+        id: doc.id,
+        quizId: quizId,
+        question: doc['question'],
+        option1: doc['option1'],
+        option2: doc['option2'],
+        option3: doc['option3'],
+        option4: doc['option4'],
+      );
+    }).toList();
+  }
 }

@@ -1,7 +1,7 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/services/auth.dart';
 import 'package:quiz_maker/services/database.dart';
+import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/views/create_quiz.dart';
 import 'package:quiz_maker/views/signin.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
@@ -14,25 +14,23 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late Future<List<Map<String, dynamic>>> quizzesFuture;
   DatabaseService databaseService = DatabaseService();
   AuthService authService = AuthService();
+  String? currentUserEmail;
 
   @override
   void initState() {
     super.initState();
-    quizzesFuture = databaseService.getQuizzes();
-  }
-
-  void refreshQuizzes() {
-    setState(() {
-      quizzesFuture = databaseService.getQuizzes();
+    authService.getCurrentUser().then((user) {
+      setState(() {
+        currentUserEmail = user?.email;
+      });
     });
   }
 
   Widget quizList() {
-    return FutureBuilder<List<Map<String, dynamic>>>(
-      future: quizzesFuture,
+    return StreamBuilder<List<Quiz>>(
+      stream: databaseService.getQuizzesStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -47,15 +45,23 @@ class _HomeState extends State<Home> {
             itemBuilder: (context, index) {
               var quiz = quizzes[index];
               return QuizTitle(
-                quiz['quizData']['quizImgUrl'],
-                quiz['quizData']['quizTitle'],
-                quiz['quizData']['quizDescription'],
+                quiz.imgUrl,
+                quiz.name,
+                quiz.description,
+                quiz.creatorEmail == currentUserEmail,
+                    () {
+                  deleteQuiz(quiz.id);
+                },
               );
             },
           );
         }
       },
     );
+  }
+
+  Future<void> deleteQuiz(String quizId) async {
+    await databaseService.deleteQuiz(quizId);
   }
 
   @override
@@ -69,7 +75,9 @@ class _HomeState extends State<Home> {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout, size: 30),
-            onPressed: () { signOut(); },
+            onPressed: () {
+              signOut();
+            },
           ),
         ],
       ),
@@ -83,20 +91,17 @@ class _HomeState extends State<Home> {
               builder: (context) => const CreateQuiz(),
             ),
           );
-          refreshQuizzes(); // Refresh quizzes after coming back from the CreateQuiz screen
         },
       ),
     );
   }
 
   void signOut() {
-    authService.signOut().then((val){
+    authService.signOut().then((val) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) =>
-          const SignIn()
-        )
+        context,
+        MaterialPageRoute(builder: (context) => const SignIn()),
       );
-
     });
   }
 }
@@ -105,23 +110,38 @@ class QuizTitle extends StatelessWidget {
   final String imgUrl;
   final String title;
   final String desc;
+  final bool canDelete;
+  final VoidCallback onDelete;
 
-  QuizTitle(this.imgUrl, this.title, this.desc);
+  QuizTitle(this.imgUrl, this.title, this.desc, this.canDelete, this.onDelete);
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder(
-      child: Stack(
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.network(imgUrl),
-          Container(
-            child: Column(
-              children: [
-                Text(title),
-                Text(desc),
-              ],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              title,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-          )
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(desc),
+          ),
+          if (canDelete)
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: onDelete,
+              ),
+            ),
         ],
       ),
     );
