@@ -68,7 +68,7 @@ class _CreateQuizState extends State<CreateQuiz> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Quiz'),
+        title: Text('Създаване на тест'),
         backgroundColor: Colors.blueAccent,
       ),
       body: isLoading

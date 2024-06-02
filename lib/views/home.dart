@@ -4,6 +4,7 @@ import 'package:quiz_maker/services/database.dart';
 import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/views/create_quiz.dart';
 import 'package:quiz_maker/views/signin.dart';
+import 'package:quiz_maker/views/solve_quiz.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
 import '../common/constants.dart';
@@ -51,6 +52,7 @@ class _HomeState extends State<Home> {
                 quiz.imgUrl,
                 quiz.name,
                 quiz.description,
+                quiz.id,
                 [currentUserEmail, Constants.defaultMail].contains(quiz.creatorEmail),
                     () {
                   deleteQuiz(quiz.id);
@@ -87,6 +89,7 @@ class _HomeState extends State<Home> {
       body: quizList(),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
+        backgroundColor: Colors.blue,
         onPressed: () async {
           await Navigator.push(
             context,
@@ -114,39 +117,49 @@ class QuizTitle extends StatelessWidget {
   final String imgUrl;
   final String title;
   final String desc;
+  final String quizId;
   final bool canDelete;
   final VoidCallback onDelete;
 
-  QuizTitle(this.imgUrl, this.title, this.desc, this.canDelete, this.onDelete);
+  QuizTitle(this.imgUrl, this.title, this.desc, this.quizId, this.canDelete, this.onDelete);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.network(imgUrl),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(desc),
-          ),
-          if (canDelete)
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: onDelete,
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(
+            context, MaterialPageRoute(
+            builder: (context) => QuizSolvingScreen(quizId: quizId))
+        );
+      },
+      child: Card(
+        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(imgUrl),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                title,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(desc),
+            ),
+            if (canDelete)
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: const Icon(Icons.delete),
+                  color: Colors.red.shade900,
+                  onPressed: onDelete,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
