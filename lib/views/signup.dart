@@ -114,7 +114,7 @@ class _SignUpState extends State<SignUp> {
                     style: TextStyle(fontSize: 16),),
                   GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(context,
+                        Navigator.push(context,
                             MaterialPageRoute(builder: (context) => SignIn()
                             ));
                       },

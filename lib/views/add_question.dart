@@ -23,42 +23,45 @@ class _AddQuestionState extends State<AddQuestion> {
   Uuid _uuid = Uuid();
 
   saveQuiz() {
-    uploadQuestion();
+    if (_formKey.currentState?.validate() == true) {
+      uploadQuestion();
 
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Home()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const Home()));
+    }
   }
 
   void processToNextQuestion() {
-    uploadQuestion();
 
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AddQuestion(quizId: widget.quizId)));
+    if (_formKey.currentState?.validate() == true) {
+      uploadQuestion();
+
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AddQuestion(quizId: widget.quizId)));
+    }
   }
 
   uploadQuestion() {
-    if (_formKey.currentState?.validate() == true) {
-      setState(() {
-        isLoading = true;
-      });
+    setState(() {
+      isLoading = true;
+    });
 
-      Question questionForSave = Question(
-        id: _uuid.v4(),
-        quizId: widget.quizId,
-        question: question,
-        option1: option1,
-        option2: option2,
-        option3: option3,
-        option4: option4,
-      );
-      databaseService.addQuestion(questionForSave).then((val) {
-        setState(() {
-          isLoading = false;
-        });
+    Question questionForSave = Question(
+      id: _uuid.v4(),
+      quizId: widget.quizId,
+      question: question,
+      option1: option1,
+      option2: option2,
+      option3: option3,
+      option4: option4,
+    );
+    databaseService.addQuestion(questionForSave).then((val) {
+      setState(() {
+        isLoading = false;
       });
-    }
+    });
   }
 
   @override
@@ -82,6 +85,7 @@ class _AddQuestionState extends State<AddQuestion> {
                 child: Column(
                   children: [
                     TextFormField(
+                      validator: (val) => val!.isEmpty ? "Полето е задължително" : null,
                       decoration: const InputDecoration(hintText: "Въпрос"),
                       onChanged: (val) {
                         question = val;
@@ -92,7 +96,7 @@ class _AddQuestionState extends State<AddQuestion> {
                     ),
                     TextFormField(
                       //add more validations
-                      validator: (val) => val!.isEmpty ? "Option one" : null,
+                      validator: (val) => val!.isEmpty ? "Полето е задължително" : null,
                       decoration:
                           const InputDecoration(hintText: "Правилният отговор"),
                       onChanged: (val) {
@@ -103,8 +107,7 @@ class _AddQuestionState extends State<AddQuestion> {
                       height: 6,
                     ),
                     TextFormField(
-                      validator: (val) =>
-                          val!.isEmpty ? "Enter description" : null,
+                      validator: (val) => val!.isEmpty ? "Полето е задължително" : null,
                       decoration: const InputDecoration(hintText: "Опция две"),
                       onChanged: (val) {
                         option2 = val;
@@ -114,6 +117,7 @@ class _AddQuestionState extends State<AddQuestion> {
                       height: 6,
                     ),
                     TextFormField(
+                      validator: (val) => val!.isEmpty ? "Полето е задължително" : null,
                       decoration: const InputDecoration(hintText: "Опция три"),
                       onChanged: (val) {
                         option3 = val;
@@ -123,6 +127,7 @@ class _AddQuestionState extends State<AddQuestion> {
                       height: 6,
                     ),
                     TextFormField(
+                      validator: (val) => val!.isEmpty ? "Полето е задължително" : null,
                       decoration:
                           const InputDecoration(hintText: "Опция четири"),
                       onChanged: (val) {

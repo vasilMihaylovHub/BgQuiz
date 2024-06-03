@@ -105,7 +105,7 @@ import '../common/functions.dart';
                     Text("Нямаш регистрация? ", style: TextStyle(fontSize: 16),),
                     GestureDetector(
                         onTap: (){
-                          Navigator.pushReplacement(context,
+                          Navigator.push(context,
                           MaterialPageRoute(builder: (context) => SignUp())
                           );
                         },
