@@ -41,29 +41,28 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBcQVqspFhr1AFl6B9BL5-I_5Mlv1Jwq1U',
-    appId: '1:42162399258:web:4f1600c309bfb8ed2989a3',
-    messagingSenderId: '42162399258',
-    projectId: 'quaizapp-b0c01',
-    authDomain: 'quaizapp-b0c01.firebaseapp.com',
-    storageBucket: 'quaizapp-b0c01.appspot.com',
-    measurementId: 'G-EF4QFB7LCV',
+    apiKey: 'AIzaSyD7iW9UUXC1Q1LlvT_9_HXi9f9HLMumtbo',
+    appId: '1:902374159906:web:412ec20f8e57b42b957c7b',
+    messagingSenderId: '902374159906',
+    projectId: 'bgquiz-ef282',
+    authDomain: 'bgquiz-ef282.firebaseapp.com',
+    storageBucket: 'bgquiz-ef282.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD90takR42JG0tVTAW9e6MLpQNa550sfcw',
-    appId: '1:42162399258:android:2977f3ac195720fd2989a3',
-    messagingSenderId: '42162399258',
-    projectId: 'quaizapp-b0c01',
-    storageBucket: 'quaizapp-b0c01.appspot.com',
+    apiKey: 'AIzaSyAYwASdHBucO1jQ2Pp0bN7HfmHQr0sZtEg',
+    appId: '1:902374159906:android:9cb4f0604baf28df957c7b',
+    messagingSenderId: '902374159906',
+    projectId: 'bgquiz-ef282',
+    storageBucket: 'bgquiz-ef282.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB4tI57TDfSxu40qPk8bbx9Jk8cesthdxE',
-    appId: '1:42162399258:ios:8cd7d02301dfc0c82989a3',
-    messagingSenderId: '42162399258',
-    projectId: 'quaizapp-b0c01',
-    storageBucket: 'quaizapp-b0c01.appspot.com',
+    apiKey: 'AIzaSyBvzmkjthVySgBowPBqHMh_Rw5XRzBDhpg',
+    appId: '1:902374159906:ios:e7842036fb19619c957c7b',
+    messagingSenderId: '902374159906',
+    projectId: 'bgquiz-ef282',
+    storageBucket: 'bgquiz-ef282.appspot.com',
     iosBundleId: 'com.example.quizMaker',
   );
 
@@ -77,12 +76,11 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBcQVqspFhr1AFl6B9BL5-I_5Mlv1Jwq1U',
-    appId: '1:42162399258:web:5959e17bb0f0748f2989a3',
-    messagingSenderId: '42162399258',
-    projectId: 'quaizapp-b0c01',
-    authDomain: 'quaizapp-b0c01.firebaseapp.com',
-    storageBucket: 'quaizapp-b0c01.appspot.com',
-    measurementId: 'G-VQHQPGBFK0',
+    apiKey: 'AIzaSyD7iW9UUXC1Q1LlvT_9_HXi9f9HLMumtbo',
+    appId: '1:902374159906:web:dd85a15c8e2a9a99957c7b',
+    messagingSenderId: '902374159906',
+    projectId: 'bgquiz-ef282',
+    authDomain: 'bgquiz-ef282.firebaseapp.com',
+    storageBucket: 'bgquiz-ef282.appspot.com',
   );
 }

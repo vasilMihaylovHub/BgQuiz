@@ -5,7 +5,7 @@ import 'package:quiz_maker/views/home.dart';
 import 'package:quiz_maker/views/signin.dart';
 import 'firebase_options.dart';
 
-Future<void> main() async {
+void main() async {
   // Ensure Flutter framework is initialized
   WidgetsFlutterBinding.ensureInitialized();
 

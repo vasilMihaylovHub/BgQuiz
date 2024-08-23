@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "42162399258",
-    "project_id": "quaizapp-b0c01",
-    "storage_bucket": "quaizapp-b0c01.appspot.com"
+    "project_number": "902374159906",
+    "project_id": "bgquiz-ef282",
+    "storage_bucket": "bgquiz-ef282.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:42162399258:android:2977f3ac195720fd2989a3",
+        "mobilesdk_app_id": "1:902374159906:android:9cb4f0604baf28df957c7b",
         "android_client_info": {
           "package_name": "com.example.quiz_maker"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD90takR42JG0tVTAW9e6MLpQNa550sfcw"
+          "current_key": "AIzaSyAYwASdHBucO1jQ2Pp0bN7HfmHQr0sZtEg"
         }
       ],
       "services": {

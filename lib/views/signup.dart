@@ -33,7 +33,7 @@ class _SignUpState extends State<SignUp> {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => Home()));
             }
-      });
+      });/*.catchError(onError)*/
 
       setState(() {
         isLoading = false;
