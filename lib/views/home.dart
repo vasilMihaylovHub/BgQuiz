@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/models/quiz.dart';
-import 'package:quiz_maker/services/auth.dart';
-import 'package:quiz_maker/services/database.dart';
+import 'package:quiz_maker/services/auth_service.dart';
+import 'package:quiz_maker/services/quizz_service.dart';
 import 'package:quiz_maker/views/add_question.dart';
 import 'package:quiz_maker/views/create_quiz.dart';
 import 'package:quiz_maker/views/play_quiz.dart';
@@ -19,7 +19,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  DatabaseService databaseService = DatabaseService();
+  QuizService quizService = QuizService();
   AuthService authService = AuthService();
   String? currentUserEmail;
 
@@ -35,14 +35,14 @@ class _HomeState extends State<Home> {
 
   Widget quizList() {
     return StreamBuilder<List<Quiz>>(
-      stream: databaseService.getQuizzesStream(),
+      stream: quizService.getQuizzesStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('Все още няма тестове. Бъди първия'));
+          return const Center(child: Text('Няма създаддени тестове.'));
         } else {
           var quizzes = snapshot.data!;
           return ListView.builder(
@@ -74,7 +74,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> deleteQuiz(String quizId) async {
-    await databaseService.deleteQuiz(quizId);
+    await quizService.deleteQuiz(quizId);
   }
 
   @override

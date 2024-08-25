@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/question.dart';
 import '../models/quiz.dart';
 
-class DatabaseService {
+class QuizService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Stream<List<Quiz>> getQuizzesStream() {

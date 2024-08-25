@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_maker/services/auth.dart';
+import 'package:quiz_maker/services/auth_service.dart';
 import 'package:quiz_maker/views/home.dart';
 import 'package:quiz_maker/views/signup.dart';
 import 'package:quiz_maker/widgets/widgets.dart';

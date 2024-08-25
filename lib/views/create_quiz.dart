@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/common/constants.dart';
 import 'package:quiz_maker/models/quiz.dart';
-import 'package:quiz_maker/services/database.dart';
-import 'package:quiz_maker/services/auth.dart';
+import 'package:quiz_maker/services/quizz_service.dart';
+import 'package:quiz_maker/services/auth_service.dart';
 import 'package:uuid/uuid.dart';
 
 import '../widgets/widgets.dart';
@@ -19,7 +19,7 @@ class _CreateQuizState extends State<CreateQuiz> {
   final _formKey = GlobalKey<FormState>();
   late String quizTitle, quizDesc, quizImgUrl;
   bool isLoading = false;
-  DatabaseService databaseService = DatabaseService();
+  QuizService databaseService = QuizService();
   AuthService authService = AuthService();
 
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/models/question.dart';
 import 'package:quiz_maker/models/result_model.dart';
-import 'package:quiz_maker/services/database.dart';
+import 'package:quiz_maker/services/quizz_service.dart';
 import 'package:quiz_maker/views/results.dart';
 import 'package:quiz_maker/widgets/quiz_play_widget.dart';
 
@@ -17,7 +17,7 @@ class PlayQuiz extends StatefulWidget {
 }
 
 class _PlayQuizState extends State<PlayQuiz> {
-  DatabaseService _db = DatabaseService();
+  QuizService _db = QuizService();
   List<Question> _questions = [];
   int _correct = 0;
   int _incorrct = 0;

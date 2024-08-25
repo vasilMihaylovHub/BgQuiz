@@ -3,7 +3,7 @@ import 'package:quiz_maker/views/home.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/question.dart';
-import '../services/database.dart';
+import '../services/quizz_service.dart';
 import '../widgets/widgets.dart';
 
 class AddQuestion extends StatefulWidget {
@@ -18,7 +18,7 @@ class AddQuestion extends StatefulWidget {
 class _AddQuestionState extends State<AddQuestion> {
   final _formKey = GlobalKey<FormState>();
   late String question, option1, option2, option3, option4;
-  DatabaseService databaseService = DatabaseService();
+  QuizService databaseService = QuizService();
   bool isLoading = false;
   Uuid _uuid = Uuid();
 
