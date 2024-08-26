@@ -91,7 +91,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: appBar(context),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0.0,
         actions: [
           IconButton(
