@@ -37,14 +37,12 @@ import '../common/functions.dart';
                 const SnackBar(content: Text('Неуспешно влизане. Моля опитайте отново'))
             );
           }
+          })
+        .whenComplete(() {
+          setState(() {
+            isLoading = false;
           });
-
-
-        setState(() {
-          isLoading = false;
         });
-
-
       }
     }
 
@@ -63,59 +61,64 @@ import '../common/functions.dart';
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 24),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Spacer(),
-                TextFormField(
-                  validator: (val){
-                    return val!.isEmpty ?
-                    "Полето е задължително" : null;
-                  },
-                  decoration: const InputDecoration(
-                    hintText: "Емайл"
-                  ),
-                  onChanged: (val){
-                    email = val;
-                  },
-                ),
-                SizedBox(height: 6,),
-                TextFormField(
-                  obscureText: true,
-                  validator: (val){
-                    return val!.isEmpty ?
-                    "Полето е задължително" : null;
-                  },
-                  decoration: InputDecoration(
-                      hintText: "Парола"
-                  ),
-                  onChanged: (val){
-                    password = val;
-                  },
-                ),
-                SizedBox(height: 24,),
-                GestureDetector(
-                  onTap: (){
-                    signIn();
-                  },
-                  child: blueButton(context: context, label: "Влез"),
-                ),
-                SizedBox(height: 18),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Нямаш регистрация? ", style: TextStyle(fontSize: 16),),
+                    const Icon(Icons.person, size: 80, color: Colors.black), // TODO: Theme.of(context).colorScheme.inversePrimary
+                    const SizedBox(height: 45),
+                    TextFormField(
+                      validator: (val) {
+                        return val!.isEmpty ? "Полето е задължително" : null;
+                      },
+                      decoration: const InputDecoration(hintText: "Емайл"),
+                      onChanged: (val) {
+                        email = val;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    TextFormField(
+                      obscureText: true,
+                      validator: (val) {
+                        return val!.isEmpty ? "Полето е задължително" : null;
+                      },
+                      decoration: InputDecoration(hintText: "Парола"),
+                      onChanged: (val) {
+                        password = val;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 35,
+                    ),
                     GestureDetector(
-                        onTap: (){
-                          Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignUp())
-                          );
-                        },
-                        child: Text("Регистрация", style: TextStyle(fontSize: 16, decoration: TextDecoration.underline)
-                        )
-                    )
+                      onTap: () {
+                        signIn();
+                      },
+                      child: blueButton(context: context, label: "Влез"),
+                    ),
+                    SizedBox(height: 18),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Нямаш регистрация? ",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SignUp()));
+                            },
+                            child: Text("Регистрация",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    decoration: TextDecoration.underline)))
+                      ],
+                    ),
+                   //TODO: Icons for GCP/AWS/Meta authorization
                   ],
-                ),
-                SizedBox(height: 80,)
-              ],
             ),
           ),
         ),

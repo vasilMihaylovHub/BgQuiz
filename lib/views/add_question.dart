@@ -26,8 +26,7 @@ class _AddQuestionState extends State<AddQuestion> {
     if (_formKey.currentState?.validate() == true) {
       uploadQuestion();
 
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const Home()));
+      Navigator.pop(context);
     }
   }
 

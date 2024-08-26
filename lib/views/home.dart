@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_maker/components/action_buttons.dart';
+import 'package:quiz_maker/components/quiz_cover_image.dart';
 import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/services/auth_service.dart';
 import 'package:quiz_maker/services/quizz_service.dart';
@@ -22,55 +24,61 @@ class _HomeState extends State<Home> {
   QuizService quizService = QuizService();
   AuthService authService = AuthService();
   String? currentUserEmail;
+  bool userLoading = true;
 
   @override
   void initState() {
     super.initState();
+    loadCurrentUser();
+  }
+
+  void loadCurrentUser() {
     authService.getCurrentUser().then((user) {
       setState(() {
         currentUserEmail = user?.email;
+      });
+    }).whenComplete((){
+      setState(() {
+        userLoading = false;
       });
     });
   }
 
   Widget quizList() {
-    return StreamBuilder<List<Quiz>>(
-      stream: quizService.getQuizzesStream(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('Няма създаддени тестове.'));
-        } else {
-          var quizzes = snapshot.data!;
-          return ListView.builder(
-            itemCount: quizzes.length,
-            itemBuilder: (context, index) {
-              var quiz = quizzes[index];
-              return QuizTitle(
-                quiz.imgUrl,
-                quiz.name,
-                quiz.description,
-                quiz.id,
-                [currentUserEmail, Constants.defaultMail]
-                    .contains(quiz.creatorEmail),
-                () {
-                  deleteQuiz(quiz.id);
+    return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 24),
+        child: StreamBuilder<List<Quiz>>(
+          stream: quizService.getQuizzesStream(),
+          builder: (context, snapshot) {
+            if (userLoading || snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('Няма създаддени тестове.'));
+            } else {
+              var quizzes = snapshot.data!;
+              return ListView.builder(
+                itemCount: quizzes.length,
+                itemBuilder: (context, index) {
+                  var quiz = quizzes[index];
+                  bool showActions = [currentUserEmail, Constants.defaultMail].contains(quiz.creatorEmail);
+                  return QuizTitle(
+                      quiz.imgUrl,
+                      quiz.name,
+                      quiz.description,
+                      quiz.id,
+                      showActions,
+                          () { deleteQuiz(quiz.id); }
+                         /* () { Navigator.push(
+                        context, MaterialPageRoute( builder: (context) =>
+                                AddQuestion(quizId: quiz.id)));}*/
+                  );
                 },
-                  (){
-                    Navigator.push(
-                        context, MaterialPageRoute(
-                        builder: (context) => AddQuestion(quizId: quiz.id))
-                    );
-                  }
               );
-            },
-          );
-        }
-      },
-    );
+            }
+          },
+        ));
   }
 
   Future<void> deleteQuiz(String quizId) async {
@@ -126,54 +134,60 @@ class QuizTitle extends StatelessWidget {
   final String title;
   final String desc;
   final String quizId;
-  final bool canDelete;
+  final bool showActions;
   final VoidCallback onDelete;
-  final VoidCallback onEdit;
 
-  QuizTitle(this.imgUrl, this.title, this.desc, this.quizId, this.canDelete,
-      this.onDelete, this.onEdit);
+  QuizTitle(this.imgUrl, this.title, this.desc, this.quizId,
+      this.showActions, this.onDelete, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => PlayQuiz(quizId: quizId)));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlayQuiz(quizId: quizId),
+          ),
+        );
       },
       child: Card(
-        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.network(imgUrl),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                title,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        child: SizedBox(
+          height: 200.0, // Set the desired smaller height here
+          child: Stack(
+            children: [
+              QuizCoverImage(imgUrl: imgUrl),
+              Padding(
+                padding: const EdgeInsets.all(20), // Adjust padding as needed
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Title Text
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // Ensures text is visible over the image
+                      ),
+                    ),
+                    SizedBox(height: 8.0), // Spacing between elements
+                    // Description Text
+                    Text(
+                      desc,
+                      style: TextStyle(
+                        color: Colors.black, // Ensures text is visible over the image
+                      ),
+                    ),
+                    Spacer(), // Pushes the row to the bottom
+                    // Conditional Action Buttons
+                    if (showActions)
+                      ActionButtons(quizId: quizId, onDelete: onDelete,)
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(desc),
-            ),
-            if (canDelete)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: onEdit,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    color: Colors.red.shade900,
-                    onPressed: onDelete,
-                  ),
-                ],
-              ),
-
-          ],
+            ],
+          ),
         ),
       ),
     );

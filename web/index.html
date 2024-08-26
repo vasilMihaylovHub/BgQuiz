@@ -39,20 +39,30 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
-  <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.load({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp();
-          });
-        }
-      });
+<script>
+  window.addEventListener('load', function(ev) {
+    {{flutter_js}}
+    {{flutter_build_config}}
+
+    _flutter.loader.load({
+      serviceWorker: {
+        serviceWorkerVersion: {{flutter_service_worker_version}},
+      },
+      onEntrypointLoaded: function(engineInitializer) {
+        engineInitializer.initializeEngine().then(function(appRunner) {
+          if(document.getElementById('splash'))
+            document.getElementById('splash').remove();
+          appRunner.runApp();
+        });
+      }
     });
-  </script>
+  });
+</script>
+
+<picture id="splash"   >
+  <source srcset="splash/img/iso_gradient_vert-x3.png 1x" media="(prefers-color-scheme: light) or (prefers-color-scheme: no-preference)">
+  <source srcset="splash/img/iso_gradient_vert-x3.png 1x" media="(prefers-color-scheme: dark)">
+  <img class="center" src="splash/img/iso_gradient_vert-x3.png" width="500" height="500"  alt="LOGO"/>
+</picture>
 </body>
 </html>
