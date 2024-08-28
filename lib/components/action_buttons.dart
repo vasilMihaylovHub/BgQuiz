@@ -5,11 +5,13 @@ import '../views/add_question.dart';
 class ActionButtons extends StatelessWidget {
   final String quizId;
   final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
   const ActionButtons({
     super.key,
     required this.quizId,
-    required this.onDelete
+    required this.onDelete,
+    required this.onEdit,
   });
 
   @override
@@ -19,7 +21,7 @@ class ActionButtons extends StatelessWidget {
       children: [
         IconButton(
           icon: const Icon(Icons.edit, color: Colors.white),
-          onPressed: navigateOnAddQuestion(context),
+          onPressed: onEdit,
         ),
         IconButton(
           icon: const Icon(Icons.delete, color: Colors.red),
@@ -27,11 +29,5 @@ class ActionButtons extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  navigateOnAddQuestion(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute( builder: (context) =>
-        AddQuestion(quizId: quizId)));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_maker/components/text_field.dart';
 import 'package:quiz_maker/services/auth_service.dart';
 import 'package:quiz_maker/views/home.dart';
 import 'package:quiz_maker/views/signup.dart';
@@ -63,7 +64,7 @@ import '../common/functions.dart';
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                    const Icon(Icons.person, size: 80, color: Colors.black), // TODO: Theme.of(context).colorScheme.inversePrimary
+                    Icon(Icons.person, size: 80, color: Theme.of(context).colorScheme.inversePrimary),// change with logo of the game
                     const SizedBox(height: 45),
                     TextFormField(
                       validator: (val) {
@@ -100,9 +101,9 @@ import '../common/functions.dart';
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          "Нямаш регистрация? ",
-                          style: TextStyle(fontSize: 16),
+                        const MyTextField(
+                            text: 'Нямаш регистрация? ',
+                            fontSize: 16,
                         ),
                         GestureDetector(
                             onTap: () {
@@ -111,10 +112,13 @@ import '../common/functions.dart';
                                   MaterialPageRoute(
                                       builder: (context) => SignUp()));
                             },
-                            child: Text("Регистрация",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    decoration: TextDecoration.underline)))
+                            child: const MyTextField(
+                                text: 'Регистрация',
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                textDecoration: TextDecoration.underline
+                            ),
+                        ),
                       ],
                     ),
                    //TODO: Icons for GCP/AWS/Meta authorization

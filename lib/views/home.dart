@@ -12,6 +12,7 @@ import 'package:quiz_maker/widgets/widgets.dart';
 
 import '../common/constants.dart';
 import '../common/functions.dart';
+import '../components/text_field.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -31,6 +32,40 @@ class _HomeState extends State<Home> {
     super.initState();
     loadCurrentUser();
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: appBar(context),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        elevation: 0.0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, size: 30),
+            onPressed: () {
+              signOut();
+            },
+          ),
+        ],
+      ),
+      body: quizList(),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.blue,
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CreateQuiz(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
 
   void loadCurrentUser() {
     authService.getCurrentUser().then((user) {
@@ -69,10 +104,8 @@ class _HomeState extends State<Home> {
                       quiz.description,
                       quiz.id,
                       showActions,
-                          () { deleteQuiz(quiz.id); }
-                         /* () { Navigator.push(
-                        context, MaterialPageRoute( builder: (context) =>
-                                AddQuestion(quizId: quiz.id)));}*/
+                          () { deleteQuiz(quiz.id); },
+                          () { navigateOnAddQuestion(context, quiz.id); }
                   );
                 },
               );
@@ -81,42 +114,16 @@ class _HomeState extends State<Home> {
         ));
   }
 
+  navigateOnAddQuestion(BuildContext context, String quizId) {
+    Navigator.push(
+        context, MaterialPageRoute( builder: (context) =>
+        AddQuestion(quizId: quizId)));
+  }
+
   Future<void> deleteQuiz(String quizId) async {
     await quizService.deleteQuiz(quizId);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: appBar(context),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        elevation: 0.0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout, size: 30),
-            onPressed: () {
-              signOut();
-            },
-          ),
-        ],
-      ),
-      body: quizList(),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.blue,
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CreateQuiz(),
-            ),
-          );
-        },
-      ),
-    );
-  }
 
   void signOut() {
     authService.signOut().then((val) {
@@ -136,9 +143,10 @@ class QuizTitle extends StatelessWidget {
   final String quizId;
   final bool showActions;
   final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
   QuizTitle(this.imgUrl, this.title, this.desc, this.quizId,
-      this.showActions, this.onDelete, {super.key});
+      this.showActions, this.onDelete, this.onEdit, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -162,27 +170,13 @@ class QuizTitle extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title Text
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black, // Ensures text is visible over the image
-                      ),
-                    ),
-                    SizedBox(height: 8.0), // Spacing between elements
-                    // Description Text
-                    Text(
-                      desc,
-                      style: TextStyle(
-                        color: Colors.black, // Ensures text is visible over the image
-                      ),
-                    ),
-                    Spacer(), // Pushes the row to the bottom
+                    MyTextField(text: title, fontWeight: FontWeight.bold, fontSize: 18),
+                    SizedBox(height: 8.0),
+                    MyTextField(text: desc),
+                    Spacer(),
                     // Conditional Action Buttons
                     if (showActions)
-                      ActionButtons(quizId: quizId, onDelete: onDelete,)
+                      ActionButtons(quizId: quizId, onDelete: onDelete, onEdit: onEdit,)
                   ],
                 ),
               ),

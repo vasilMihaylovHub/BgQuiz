@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 Widget appBar(BuildContext context){
   return RichText(
-    text: const TextSpan(
+    text: TextSpan(
       style: TextStyle(fontSize: 26),
       children: <TextSpan>[
         TextSpan(text: 'Bg', style: TextStyle(fontWeight: FontWeight.w500,
-        color: Colors.black)),
+        color: Theme.of(context).colorScheme.inversePrimary)),
         TextSpan(text: 'Quiz', style: TextStyle(fontWeight: FontWeight.w500,
         color: Colors.blue)),
       ],

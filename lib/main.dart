@@ -5,6 +5,7 @@ import 'package:quiz_maker/theme/dark_mode.dart';
 import 'package:quiz_maker/theme/light_mode.dart';
 import 'package:quiz_maker/views/home.dart';
 import 'package:quiz_maker/views/signin.dart';
+import 'common/errors/global_error_handler.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -45,7 +46,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: _isLoggedIn ? const Home() : const SignIn(),
+      home: GlobalErrorHandler(
+          child: _isLoggedIn ? const Home() : const SignIn()
+      ),
       theme: lightMode,
       darkTheme: darkMode,
       debugShowCheckedModeBanner: false,
