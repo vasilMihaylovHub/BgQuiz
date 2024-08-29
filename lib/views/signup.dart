@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/services/auth_service.dart';
+import 'package:quiz_maker/services/user_service.dart';
 import 'package:quiz_maker/views/signin.dart';
 
 import '../common/functions.dart';
+import '../models/user.dart';
 import '../widgets/widgets.dart';
 import 'home.dart';
 
@@ -17,7 +19,9 @@ class _SignUpState extends State<SignUp> {
 
   final _formKey = GlobalKey<FormState>();
   late String name, email, password;
+  late ProfileUser profileUser;
   AuthService authService = AuthService();
+  UserService userService = UserService();
   bool isLoading = false;
 
 
@@ -25,15 +29,18 @@ class _SignUpState extends State<SignUp> {
     if(_formKey.currentState!.validate()){
       setState(() {
         isLoading = true;
+        profileUser = ProfileUser(email: email, name: name, password: password);
       });
-      authService.signUp(name, email, password)
-          .then((user) {
-            if(user != null) {
+      authService.signUp(email, password)
+          .then((authUser) {
+            if(authUser != null) {
+              userService.createUserDocument(profileUser);
+
               HelperFunctions.saveCurrentUser(isLoggedIn: true);
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => Home()));
             }
-      });/*.catchError(onError)*/
+      });
 
       setState(() {
         isLoading = false;
@@ -85,7 +92,6 @@ class _SignUpState extends State<SignUp> {
                   email = val;
                 },
               ),
-              SizedBox(height: 6,),
               TextFormField(
                 obscureText: true,
                 validator: (val) {
@@ -98,6 +104,16 @@ class _SignUpState extends State<SignUp> {
                 onChanged: (val) {
                   password = val;
                 },
+              ),
+              TextFormField(
+                obscureText: true,
+                validator: (val) {
+                  return val != password ?
+                  "Паролите не съвпадат" : null;
+                },
+                decoration: const InputDecoration(
+                    hintText: "Потвърждение на паролата"
+                ),
               ),
               SizedBox(height: 24,),
               GestureDetector(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/components/action_buttons.dart';
+import 'package:quiz_maker/components/drawer.dart';
 import 'package:quiz_maker/components/quiz_cover_image.dart';
 import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/services/auth_service.dart';
@@ -7,11 +8,10 @@ import 'package:quiz_maker/services/quizz_service.dart';
 import 'package:quiz_maker/views/add_question.dart';
 import 'package:quiz_maker/views/create_quiz.dart';
 import 'package:quiz_maker/views/play_quiz.dart';
-import 'package:quiz_maker/views/signin.dart';
+import 'package:quiz_maker/views/profile.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
 import '../common/constants.dart';
-import '../common/functions.dart';
 import '../components/text_field.dart';
 
 class Home extends StatefulWidget {
@@ -36,6 +36,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MyDrawer(),
       appBar: AppBar(
         title: appBar(context),
         centerTitle: true,
@@ -43,9 +44,12 @@ class _HomeState extends State<Home> {
         elevation: 0.0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout, size: 30),
+            icon: const Icon(Icons.notifications_active, size: 30),
             onPressed: () {
-              signOut();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfilePage()),
+              );
             },
           ),
         ],
@@ -66,13 +70,12 @@ class _HomeState extends State<Home> {
     );
   }
 
-
   void loadCurrentUser() {
     authService.getCurrentUser().then((user) {
       setState(() {
         currentUserEmail = user?.email;
       });
-    }).whenComplete((){
+    }).whenComplete(() {
       setState(() {
         userLoading = false;
       });
@@ -85,7 +88,8 @@ class _HomeState extends State<Home> {
         child: StreamBuilder<List<Quiz>>(
           stream: quizService.getQuizzesStream(),
           builder: (context, snapshot) {
-            if (userLoading || snapshot.connectionState == ConnectionState.waiting) {
+            if (userLoading ||
+                snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -97,16 +101,14 @@ class _HomeState extends State<Home> {
                 itemCount: quizzes.length,
                 itemBuilder: (context, index) {
                   var quiz = quizzes[index];
-                  bool showActions = [currentUserEmail, Constants.defaultMail].contains(quiz.creatorEmail);
-                  return QuizTitle(
-                      quiz.imgUrl,
-                      quiz.name,
-                      quiz.description,
-                      quiz.id,
-                      showActions,
-                          () { deleteQuiz(quiz.id); },
-                          () { navigateOnAddQuestion(context, quiz.id); }
-                  );
+                  bool showActions = [currentUserEmail, Constants.defaultMail]
+                      .contains(quiz.creatorEmail);
+                  return QuizTitle(quiz.imgUrl, quiz.name, quiz.description,
+                      quiz.id, showActions, () {
+                    deleteQuiz(quiz.id);
+                  }, () {
+                    navigateOnAddQuestion(context, quiz.id);
+                  });
                 },
               );
             }
@@ -115,24 +117,12 @@ class _HomeState extends State<Home> {
   }
 
   navigateOnAddQuestion(BuildContext context, String quizId) {
-    Navigator.push(
-        context, MaterialPageRoute( builder: (context) =>
-        AddQuestion(quizId: quizId)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => AddQuestion(quizId: quizId)));
   }
 
   Future<void> deleteQuiz(String quizId) async {
     await quizService.deleteQuiz(quizId);
-  }
-
-
-  void signOut() {
-    authService.signOut().then((val) {
-      HelperFunctions.saveCurrentUser(isLoggedIn: false);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const SignIn()),
-      );
-    });
   }
 }
 
@@ -145,8 +135,9 @@ class QuizTitle extends StatelessWidget {
   final VoidCallback onDelete;
   final VoidCallback onEdit;
 
-  QuizTitle(this.imgUrl, this.title, this.desc, this.quizId,
-      this.showActions, this.onDelete, this.onEdit, {super.key});
+  QuizTitle(this.imgUrl, this.title, this.desc, this.quizId, this.showActions,
+      this.onDelete, this.onEdit,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -170,13 +161,18 @@ class QuizTitle extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    MyTextField(text: title, fontWeight: FontWeight.bold, fontSize: 18),
+                    MyTextField(
+                        text: title, fontWeight: FontWeight.bold, fontSize: 18),
                     SizedBox(height: 8.0),
                     MyTextField(text: desc),
                     Spacer(),
                     // Conditional Action Buttons
                     if (showActions)
-                      ActionButtons(quizId: quizId, onDelete: onDelete, onEdit: onEdit,)
+                      ActionButtons(
+                        quizId: quizId,
+                        onDelete: onDelete,
+                        onEdit: onEdit,
+                      )
                   ],
                 ),
               ),
