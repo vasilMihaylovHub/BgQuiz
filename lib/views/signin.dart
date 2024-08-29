@@ -30,7 +30,7 @@ import '../common/functions.dart';
         await authService.signIn(email, password)
         .then((user) {
           if(user != null) {
-            HelperFunctions.saveCurrentUser(isLoggedIn: true);
+            LocalStore.saveCurrentUser(isLoggedIn: true, email: email);
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => Home()));
           } else {

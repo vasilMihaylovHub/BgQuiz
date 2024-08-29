@@ -94,7 +94,7 @@ class MyDrawer extends StatelessWidget {
 
   void logout(BuildContext context) {
     authService.signOut().then((val) {
-      HelperFunctions.saveCurrentUser(isLoggedIn: false);
+      LocalStore.saveCurrentUser(isLoggedIn: false);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const SignIn()),

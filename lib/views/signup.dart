@@ -36,7 +36,7 @@ class _SignUpState extends State<SignUp> {
             if(authUser != null) {
               userService.createUserDocument(profileUser);
 
-              HelperFunctions.saveCurrentUser(isLoggedIn: true);
+              LocalStore.saveCurrentUser(isLoggedIn: true, email: email);
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => Home()));
             }

@@ -35,9 +35,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   checkUserLoggedInStatus() async {
-    await HelperFunctions.getCurrentUserDetails().then((val){
+    await LocalStore.getCurrentUserDetails().then((store){
       setState(() {
-        _isLoggedIn = val ?? false;
+        _isLoggedIn = store.isLogged ?? false;
       });
     });
   }
