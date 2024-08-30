@@ -12,7 +12,12 @@
           "package_name": "com.example.quiz_maker"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "902374159906-acvk7hp2a5qhp9gjjdrt7k4cfs4lr8mr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAYwASdHBucO1jQ2Pp0bN7HfmHQr0sZtEg"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "902374159906-acvk7hp2a5qhp9gjjdrt7k4cfs4lr8mr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "902374159906-nehoapg2nrlt67mrhoti2mjmoe3l2he5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.quizMaker"
+              }
+            }
+          ]
         }
       }
     }

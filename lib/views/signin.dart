@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_maker/components/signin_providers.dart';
 import 'package:quiz_maker/components/text_field.dart';
 import 'package:quiz_maker/services/auth_service.dart';
 import 'package:quiz_maker/views/home.dart';
@@ -18,7 +19,7 @@ import '../common/functions.dart';
 
     final _formKey = GlobalKey<FormState>();
     late String email, password;
-    AuthService authService= AuthService();
+    AuthService authService = AuthService();
 
     bool isLoading = false;
 
@@ -98,30 +99,32 @@ import '../common/functions.dart';
                       child: blueButton(context: context, label: "Влез"),
                     ),
                     SizedBox(height: 18),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const MyTextField(
-                            text: 'Нямаш регистрация? ',
-                            fontSize: 16,
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SignUp()));
-                            },
-                            child: const MyTextField(
-                                text: 'Регистрация',
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                textDecoration: TextDecoration.underline
-                            ),
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.only(right: 22.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const MyTextField(
+                              text: 'Нямаш регистрация? '
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SignUp()));
+                              },
+                              child: const MyTextField(
+                                  text: 'Регистрация',
+                                  fontWeight: FontWeight.bold,
+                                  textDecoration: TextDecoration.underline
+                              ),
+                          ),
+                        ],
+                      ),
                     ),
-                   //TODO: Icons for GCP/AWS/Meta authorization
+                    SizedBox(height: 10),
+                    SignInProviders(onProviderTab: (provider) {authService.signInWithGoogle();})
                   ],
             ),
           ),
@@ -129,4 +132,5 @@ import '../common/functions.dart';
       );
     }
   }
+
     

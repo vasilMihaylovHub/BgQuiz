@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '902374159906',
     projectId: 'bgquiz-ef282',
     storageBucket: 'bgquiz-ef282.appspot.com',
+    iosClientId: '902374159906-nehoapg2nrlt67mrhoti2mjmoe3l2he5.apps.googleusercontent.com',
     iosBundleId: 'com.example.quizMaker',
   );
 
@@ -83,4 +84,5 @@ class DefaultFirebaseOptions {
     authDomain: 'bgquiz-ef282.firebaseapp.com',
     storageBucket: 'bgquiz-ef282.appspot.com',
   );
+
 }
