@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quiz_maker/components/action_buttons.dart';
 import 'package:quiz_maker/components/drawer.dart';
 import 'package:quiz_maker/components/quiz_cover_image.dart';
+import 'package:quiz_maker/components/streak_icon.dart';
 import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/services/auth_service.dart';
 import 'package:quiz_maker/services/quizz_service.dart';
@@ -43,15 +44,7 @@ class _HomeState extends State<Home> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0.0,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_active, size: 30),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );
-            },
-          ),
+            StreakIconButton(),
         ],
       ),
       body: quizList(),
