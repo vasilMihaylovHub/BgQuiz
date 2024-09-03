@@ -13,6 +13,9 @@ class UserService {
         .set({
       'email': user.email,
       'name': user.name,
+      'points': GamePoints.initial,
+      'streak': 0,
+      'imageUrl': null
     });
   }
 
@@ -22,6 +25,27 @@ class UserService {
         .collection(Constants.usersDbDocument)
         .doc(store.email)
         .get();
+  }
+
+  Future<void> updateUserProfile(/*String userId,*/ String name, String? imageUrl) async {
+    //TODO: Add userId
+    final store = await LocalStore.getCurrentUserDetails(); //TODO remove
+    await firestoreInstance
+        .collection(Constants.usersDbDocument)
+        .doc(store.email)
+        .update({'name': name,
+          'imageUrl': imageUrl,
+    });
+  }
+
+  Future<void> updateUserName(String name) async {
+    //TODO: Add userId
+    final store = await LocalStore.getCurrentUserDetails(); //TODO remove
+    await firestoreInstance
+        .collection(Constants.usersDbDocument)
+        .doc(store.email)
+        .update({'name': name
+    });
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getUsers() {
