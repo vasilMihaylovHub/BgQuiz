@@ -1,7 +1,9 @@
 class Constants {
   static const int databaseResponseTimeSeconds = 3;
   static const String defaultMail = "mail@not.found";
-  static const String usersDbDocument = "Users";
+  static const String usersDbDocument = "users";
+  static const String quizzesDbDocument = "quizzes";
+  static const String questionsDbDocument = "questions";
 }
 
 class GamePoints {

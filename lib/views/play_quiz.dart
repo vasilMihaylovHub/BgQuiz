@@ -10,7 +10,7 @@ import '../widgets/widgets.dart';
 class PlayQuiz extends StatefulWidget {
   final String quizId;
 
-  const PlayQuiz({Key? key, required this.quizId});
+  const PlayQuiz(this.quizId);
 
   @override
   State<PlayQuiz> createState() => _PlayQuizState();

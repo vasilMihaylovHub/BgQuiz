@@ -6,14 +6,16 @@ class Quiz {
   String imgUrl;
   String description;
   String creatorEmail;
+  List<String> likes;
 
   Quiz({
-    required this.id,
+    String? id,
     required this.name,
     required this.imgUrl,
     required this.description,
     required this.creatorEmail,
-  });
+    required this.likes,
+  }): id = id ?? DateTime.now().microsecondsSinceEpoch.toString();
 
   factory Quiz.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -23,6 +25,7 @@ class Quiz {
       imgUrl: data['quizImgUrl'],
       description: data['quizDescription'],
       creatorEmail: data['creatorEmail'],
+      likes: List<String>.from(data['likes'] ?? []),
     );
   }
 
@@ -32,6 +35,7 @@ class Quiz {
       'quizImgUrl': imgUrl,
       'quizDescription': description,
       'creatorEmail': creatorEmail,
+      'likes': likes,
     };
   }
 }

@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/components/action_buttons.dart';
 import 'package:quiz_maker/components/drawer.dart';
+import 'package:quiz_maker/components/like_button.dart';
 import 'package:quiz_maker/components/quiz_cover_image.dart';
 import 'package:quiz_maker/components/streak_icon.dart';
 import 'package:quiz_maker/models/quiz.dart';
@@ -9,10 +11,8 @@ import 'package:quiz_maker/services/quizz_service.dart';
 import 'package:quiz_maker/views/add_question.dart';
 import 'package:quiz_maker/views/create_quiz.dart';
 import 'package:quiz_maker/views/play_quiz.dart';
-import 'package:quiz_maker/views/profile.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
-import '../common/constants.dart';
 import '../components/text_field.dart';
 
 class Home extends StatefulWidget {
@@ -23,15 +23,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  QuizService quizService = QuizService();
-  AuthService authService = AuthService();
-  String? currentUserEmail;
   bool userLoading = true;
 
   @override
   void initState() {
     super.initState();
-    loadCurrentUser();
   }
 
   @override
@@ -44,7 +40,7 @@ class _HomeState extends State<Home> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0.0,
         actions: [
-            StreakIconButton(),
+          StreakIconButton(),
         ],
       ),
       body: quizList(),
@@ -58,31 +54,19 @@ class _HomeState extends State<Home> {
               builder: (context) => const CreateQuiz(),
             ),
           );
-        },
-      ),
+        }
+      )
     );
   }
 
-  void loadCurrentUser() {
-    authService.getCurrentUser().then((user) {
-      setState(() {
-        currentUserEmail = user?.email;
-      });
-    }).whenComplete(() {
-      setState(() {
-        userLoading = false;
-      });
-    });
-  }
 
   Widget quizList() {
     return Container(
         margin: const EdgeInsets.symmetric(horizontal: 24),
         child: StreamBuilder<List<Quiz>>(
-          stream: quizService.getQuizzesStream(),
+          stream: QuizService().getQuizzesStream(),
           builder: (context, snapshot) {
-            if (userLoading ||
-                snapshot.connectionState == ConnectionState.waiting) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -94,43 +78,60 @@ class _HomeState extends State<Home> {
                 itemCount: quizzes.length,
                 itemBuilder: (context, index) {
                   var quiz = quizzes[index];
-                  bool showActions = [currentUserEmail, Constants.defaultMail]
-                      .contains(quiz.creatorEmail);
-                  return QuizTitle(quiz.imgUrl, quiz.name, quiz.description,
-                      quiz.id, showActions, () {
-                    deleteQuiz(quiz.id);
-                  }, () {
-                    navigateOnAddQuestion(context, quiz.id);
-                  });
+                  return QuizTitle(quiz);
                 },
               );
             }
           },
         ));
   }
-
-  navigateOnAddQuestion(BuildContext context, String quizId) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => AddQuestion(quizId: quizId)));
-  }
-
-  Future<void> deleteQuiz(String quizId) async {
-    await quizService.deleteQuiz(quizId);
-  }
 }
 
-class QuizTitle extends StatelessWidget {
-  final String imgUrl;
-  final String title;
-  final String desc;
-  final String quizId;
-  final bool showActions;
-  final VoidCallback onDelete;
-  final VoidCallback onEdit;
+class QuizTitle extends StatefulWidget {
+  final Quiz quiz;
 
-  QuizTitle(this.imgUrl, this.title, this.desc, this.quizId, this.showActions,
-      this.onDelete, this.onEdit,
+  QuizTitle(this.quiz,
       {super.key});
+
+  @override
+  State<QuizTitle> createState() => _QuizTitleState();
+}
+
+class _QuizTitleState extends State<QuizTitle> {
+  bool isLiked = false;
+  bool showActions = false;
+  final currentUser = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+
+    showActions = currentUser?.email == widget.quiz.creatorEmail;
+    isLiked = widget.quiz.likes.contains(currentUser?.email ?? "");
+  }
+
+  toggleLike(){
+    setState(() {
+      isLiked = !isLiked;
+    });
+
+    final currUserMail = AuthService().authInstance.currentUser!.email!;
+
+    if(isLiked){
+      QuizService().likeQuiz(widget.quiz.id, currUserMail);
+    } else {
+      QuizService().dislikeQuiz(widget.quiz.id, currUserMail);
+    }
+  }
+
+  navigateOnAddQuestion(BuildContext context) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => AddQuestion(quizId: widget.quiz.id)));
+  }
+
+  Future<void> deleteQuiz() async {
+    await QuizService().deleteQuiz(widget.quiz.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,38 +140,68 @@ class QuizTitle extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PlayQuiz(quizId: quizId),
+            builder: (context) => PlayQuiz(widget.quiz.id),
           ),
         );
       },
       child: Card(
-        child: SizedBox(
-          height: 200.0, // Set the desired smaller height here
-          child: Stack(
-            children: [
-              QuizCoverImage(imgUrl: imgUrl),
-              Padding(
-                padding: const EdgeInsets.all(20), // Adjust padding as needed
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    MyTextField(
-                        text: title, fontWeight: FontWeight.bold, fontSize: 18),
-                    SizedBox(height: 8.0),
-                    MyTextField(text: desc),
-                    Spacer(),
-                    // Conditional Action Buttons
-                    if (showActions)
-                      ActionButtons(
-                        quizId: quizId,
-                        onDelete: onDelete,
-                        onEdit: onEdit,
-                      )
-                  ],
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              // Adjust padding as needed
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MyTextField(
+                            text: widget.quiz.name,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                          SizedBox(height: 8.0),
+                          MyTextField(text: widget.quiz.description),
+                          SizedBox(height: 16.0)
+                        ],
+                      ),
+                      SizedBox(
+                        height: 150.0,
+                        child: QuizCoverImage(imgUrl: widget.quiz.imgUrl),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          LikeButton(isLiked, toggleLike),
+                          const SizedBox(height: 5),
+                          Text(widget.quiz.likes.length.toString(),
+                          style: TextStyle(color: Theme.of(context).colorScheme.secondary))
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          if (showActions)
+                            ActionButtons(
+                              onDelete: () {deleteQuiz();},
+                              onEdit: navigateOnAddQuestion(context),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

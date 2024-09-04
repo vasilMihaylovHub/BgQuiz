@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_maker/views/home.dart';
-import 'package:uuid/uuid.dart';
 
 import '../models/question.dart';
 import '../services/quizz_service.dart';
@@ -20,7 +18,6 @@ class _AddQuestionState extends State<AddQuestion> {
   late String question, option1, option2, option3, option4;
   QuizService databaseService = QuizService();
   bool isLoading = false;
-  Uuid _uuid = Uuid();
 
   saveQuiz() {
     if (_formKey.currentState?.validate() == true) {
@@ -48,7 +45,6 @@ class _AddQuestionState extends State<AddQuestion> {
     });
 
     Question questionForSave = Question(
-      id: _uuid.v4(),
       quizId: widget.quizId,
       question: question,
       option1: option1,

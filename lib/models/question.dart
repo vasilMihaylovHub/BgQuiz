@@ -10,14 +10,14 @@ class Question {
   String option4;
 
   Question({
-    required this.id,
+    String? id,
     required this.quizId,
     required this.question,
     required this.option1,
     required this.option2,
     required this.option3,
     required this.option4,
-  });
+  }): id = id ?? DateTime.now().microsecondsSinceEpoch.toString();
 
   Map<String, dynamic> toJson() {
     return {

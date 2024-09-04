@@ -3,7 +3,6 @@ import 'package:quiz_maker/common/constants.dart';
 import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/services/quizz_service.dart';
 import 'package:quiz_maker/services/auth_service.dart';
-import 'package:uuid/uuid.dart';
 
 import '../widgets/widgets.dart';
 import 'add_question.dart';
@@ -31,22 +30,21 @@ class _CreateQuizState extends State<CreateQuiz> {
       });
       final currentUser = await authService.getCurrentUser();
 
-      final quizId = Uuid().v4();
       final newQuiz = Quiz(
-        id: quizId,
         name: quizTitle,
         imgUrl: quizImgUrl,
         description: quizDesc,
         creatorEmail: currentUser?.email ?? Constants.defaultMail,
+        likes: []
       );
       databaseService.createQuiz(newQuiz)
       .then((creationSuccess) {
         if(creationSuccess) {
           Navigator.pushReplacement(
               context, MaterialPageRoute(
-              builder: (context) => AddQuestion(quizId: quizId))
+              builder: (context) => AddQuestion(quizId: newQuiz.id))
           );
-        } else{
+        } else {
           setState(() {
             isLoading = false;
           });
@@ -55,10 +53,6 @@ class _CreateQuizState extends State<CreateQuiz> {
           );
         }
       });
-      Navigator.pushReplacement(
-        context, MaterialPageRoute(
-        builder: (context) => AddQuestion(quizId: quizId))
-    );
     }
 
   }

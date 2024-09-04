@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ActionButtons extends StatelessWidget {
-  final String quizId;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
 
   const ActionButtons({
     super.key,
-    required this.quizId,
     required this.onDelete,
     required this.onEdit,
   });
