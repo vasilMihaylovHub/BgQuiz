@@ -37,4 +37,14 @@ class AuthService {
 
      return await authInstance.signInWithCredential(credential);
   }
+
+  Future<bool> resetPassword(String email) async {
+    try {
+       await authInstance.sendPasswordResetEmail(email: email);
+       return Future.value(true);
+    } on Exception catch (e){
+      print( "[resetPassword] "+ e.toString());
+      return Future.value(false);
+    }
+  }
 }

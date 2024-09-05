@@ -7,6 +7,7 @@ import 'package:quiz_maker/views/signup.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
 import '../common/functions.dart';
+import 'auth/forgot_password.dart';
 
   class SignIn extends StatefulWidget {
     const SignIn({super.key});
@@ -102,23 +103,41 @@ import '../common/functions.dart';
                     Padding(
                       padding: const EdgeInsets.only(right: 22.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const MyTextField(
-                              text: 'Нямаш регистрация? '
-                          ),
                           GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SignUp()));
-                              },
-                              child: const MyTextField(
-                                  text: 'Регистрация',
-                                  fontWeight: FontWeight.bold,
-                                  textDecoration: TextDecoration.underline
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ForgotPassword()));
+                            },
+                            child: const MyTextField(
+                                text: 'Забравена парола',
+                                fontWeight: FontWeight.bold,
+                                textDecoration: TextDecoration.underline
+                            ),
+                          ),
+
+                          Row(
+                            children: [
+                              const MyTextField(
+                                  text: 'Нямаш регистрация? '
                               ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SignUp()));
+                                },
+                                child: const MyTextField(
+                                    text: 'Регистрация',
+                                    fontWeight: FontWeight.bold,
+                                    textDecoration: TextDecoration.underline
+                                ),
+                              )
+                            ],
                           ),
                         ],
                       ),
