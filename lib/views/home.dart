@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
-        title: appBar(context),
+        title: appBarLogo(context),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0.0,

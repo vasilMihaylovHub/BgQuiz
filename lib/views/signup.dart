@@ -54,7 +54,7 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: appBar(context),
+        title: appBarLogo(context),
         centerTitle: true,
       ),
       body: isLoading ?

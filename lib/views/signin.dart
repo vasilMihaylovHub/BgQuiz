@@ -50,7 +50,10 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: const MyAppBar(title: ''),
+      appBar: AppBar(
+        title: appBarLogo(context),
+        centerTitle: true,
+      ),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),

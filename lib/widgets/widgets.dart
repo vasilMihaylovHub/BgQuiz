@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget appBar(BuildContext context){
+Widget appBarLogo(BuildContext context){
   return RichText(
     text: TextSpan(
       style: TextStyle(fontSize: 26),

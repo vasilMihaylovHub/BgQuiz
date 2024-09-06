@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/components/quiz_cover_image.dart';
 import 'package:quiz_maker/components/text_field.dart';
+
 import '../models/quiz.dart';
 import '../services/auth_service.dart';
 import '../services/quizz_service.dart';
@@ -114,8 +115,8 @@ class _QuizTileState extends State<QuizTile> {
                         children: [
                           if (showActions)
                             ActionButtons(
-                              onDelete: () {deleteQuiz();},
-                              onEdit: navigateOnAddQuestion(context),
+                              onDelete: () { deleteQuiz();},
+                              onEdit: () { navigateOnAddQuestion(context);},
                             ),
                         ],
                       ),

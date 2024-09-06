@@ -3,7 +3,7 @@ import 'package:quiz_maker/components/app_bar.dart';
 import 'package:quiz_maker/services/user_service.dart';
 
 class RankingPage extends StatelessWidget {
-  final UserService userService= UserService();
+  final UserService userService = UserService();
 
   RankingPage({super.key});
 
