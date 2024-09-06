@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../components/app_bar.dart';
+
 class GlobalErrorHandler extends StatefulWidget {
   final Widget child;
 
@@ -22,7 +24,7 @@ class _GlobalErrorHandlerState extends State<GlobalErrorHandler> {
       builder: (context, errorDetails) {
         // Display a user-friendly error screen
         return Scaffold(
-          appBar: AppBar(title: Text('Грешка')),
+          appBar: const MyAppBar(title: 'Грешка'),
           body: const Center(
             child: Text('Нещо се обърка. Моля опитайте отново.'),
           ),

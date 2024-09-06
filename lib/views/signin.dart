@@ -7,6 +7,7 @@ import 'package:quiz_maker/views/signup.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
 import '../common/functions.dart';
+import '../components/app_bar.dart';
 import 'auth/forgot_password.dart';
 
 class SignIn extends StatefulWidget {
@@ -49,10 +50,7 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: appBar(context),
-        centerTitle: true,
-      ),
+      appBar: const MyAppBar(title: ''),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),

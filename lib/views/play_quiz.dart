@@ -5,6 +5,7 @@ import 'package:quiz_maker/services/quizz_service.dart';
 import 'package:quiz_maker/views/results.dart';
 import 'package:quiz_maker/widgets/quiz_play_widget.dart';
 
+import '../components/app_bar.dart';
 import '../widgets/widgets.dart';
 
 class PlayQuiz extends StatefulWidget {
@@ -38,11 +39,7 @@ class _PlayQuizState extends State<PlayQuiz> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: appBar(context),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-      ),
+      appBar: const MyAppBar(title: ''),
       body: _questions.isEmpty
           ? const Center(
               child: SizedBox(

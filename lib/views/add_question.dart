@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/app_bar.dart';
 import '../models/question.dart';
 import '../services/quizz_service.dart';
 import '../widgets/widgets.dart';
@@ -116,13 +117,7 @@ class _AddQuestionState extends State<AddQuestion> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: appBar(context),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
+      appBar: const MyAppBar(title: 'Нов въпрос'),
       body: isLoading
           ? const Center(
         child: CircularProgressIndicator(),

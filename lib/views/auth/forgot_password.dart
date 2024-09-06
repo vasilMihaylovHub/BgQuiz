@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/services/auth_service.dart';
-import 'package:quiz_maker/widgets/widgets.dart'; // Assuming you have a blueButton or other reusable widgets
+import 'package:quiz_maker/widgets/widgets.dart';
+
+import '../../components/app_bar.dart'; // Assuming you have a blueButton or other reusable widgets
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -44,10 +46,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Забравена парола"),
-        centerTitle: true,
-      ),
+      appBar: const MyAppBar(title: 'Забравена парола'),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Padding(

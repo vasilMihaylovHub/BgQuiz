@@ -4,6 +4,7 @@ import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/services/quizz_service.dart';
 import 'package:quiz_maker/services/auth_service.dart';
 
+import '../components/app_bar.dart';
 import '../widgets/widgets.dart';
 import 'add_question.dart';
 
@@ -61,10 +62,7 @@ class _CreateQuizState extends State<CreateQuiz> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Създаване на тест'),
-        backgroundColor: Colors.blueAccent,
-      ),
+        appBar: const MyAppBar(title: 'Създаване на тест'),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Padding(

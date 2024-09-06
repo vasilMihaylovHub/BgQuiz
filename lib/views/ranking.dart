@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_maker/components/app_bar.dart';
 import 'package:quiz_maker/services/user_service.dart';
 
 class RankingPage extends StatelessWidget {
@@ -9,16 +10,7 @@ class RankingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            'Ranking',
-            style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        elevation: 0,
-      ),
+      appBar: const MyAppBar(title: 'Класация'),
       backgroundColor: Theme.of(context).colorScheme.surface,
         body: StreamBuilder(
             stream: userService.getUsers(),

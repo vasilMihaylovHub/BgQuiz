@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:quiz_maker/components/text_field.dart';
 import 'package:quiz_maker/services/user_service.dart';
 
+import '../components/app_bar.dart';
 import '../services/asset_service.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -24,19 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Theme.of(context).colorScheme.inversePrimary,
-        ),
-        title: Center(
-          child: Text(
-            'Profile',
-            style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        elevation: 0,
-      ),
+      appBar: const MyAppBar(title: 'Профил'),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         future: userService.getUserDetails(),
