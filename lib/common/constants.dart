@@ -8,9 +8,10 @@ class Constants {
 
 class GamePoints {
   static const int initial = 0;
-  static const int everyStreak = 3;
+  static const int everyStreak = 2;
   static const double steakMultiplier = 1.1;
-  static const int solvedQuiz = 5;
+  static const int solvedQuiz80 = 3;
+  static const int solvedQuiz100 = 5;
   static const int createdQuiz = 10;
   static const int likes = 0; //TODO
 }
