@@ -16,7 +16,7 @@ class CreateQuiz extends StatefulWidget {
 
 class _CreateQuizState extends State<CreateQuiz> {
   final _formKey = GlobalKey<FormState>();
-  late String quizTitle, quizDesc, quizImgUrl;
+  late String quizTitle, quizDesc, quizImgUrl;//TODO quizImgUrl with img picker
   bool isLoading = false;
   QuizService databaseService = QuizService();
   AuthService authService = AuthService();
@@ -39,15 +39,16 @@ class _CreateQuizState extends State<CreateQuiz> {
       );
       databaseService.createQuiz(newQuiz)
       .then((creationSuccess) {
+        setState(() {
+          isLoading = false;
+        });
         if(creationSuccess) {
           Navigator.pushReplacement(
               context, MaterialPageRoute(
               builder: (context) => AddQuestion(quizId: newQuiz.id))
           );
         } else {
-          setState(() {
-            isLoading = false;
-          });
+
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Неуспешно създаван на тест. Моля опитайте отново'))
           );

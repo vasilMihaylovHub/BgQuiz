@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -19,7 +20,7 @@ class QuizService {
   }
 
   Future<bool> createQuiz(Quiz quiz) async {
-    print("Create quiz ${quiz.toString()}");
+    print("Creating quiz: ${quiz.name}");
 
     try {
       await _db
@@ -27,7 +28,7 @@ class QuizService {
           .doc(quiz.id)
           .set(quiz.toJson());
       return true;
-    } catch (e) {
+    } on Exception catch (e) {
       print(e.toString());
       return false;
     }
@@ -38,12 +39,19 @@ class QuizService {
     return _db.collection(Constants.quizzesDbDocument).doc(quizId).delete();
   }
 
-  Future<void> addQuestion(Question question) async {
+  Future<bool> addQuestion(Question question) async {
     print("Add question ${question.toString()}");
-    return _db
-        .collection(Constants.questionsDbDocument)
-        .doc(question.id)
-        .set(question.toJson());
+
+    try {
+      await _db
+          .collection(Constants.questionsDbDocument)
+          .doc(question.id)
+          .set(question.toJson());
+      return true;
+    } on Exception catch (ex) {
+      print("Error in addQuestion: $ex");
+      return false;
+    }
   }
 
   Future<List<Question>> getQuestionsForQuiz(String quizId) async {
