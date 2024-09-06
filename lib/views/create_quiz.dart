@@ -5,6 +5,7 @@ import 'package:quiz_maker/services/quizz_service.dart';
 import 'package:quiz_maker/services/auth_service.dart';
 
 import '../components/app_bar.dart';
+import '../services/user_service.dart';
 import '../widgets/widgets.dart';
 import 'add_question.dart';
 
@@ -38,6 +39,8 @@ class _CreateQuizState extends State<CreateQuiz> {
         creatorEmail: currentUser?.email ?? Constants.defaultMail,
         likes: []
       );
+      await UserService().incrementPoints(0);//to activate streak
+
       databaseService.createQuiz(newQuiz)
       .then((creationSuccess) {
         setState(() {

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quiz_maker/common/constants.dart';
 import 'package:quiz_maker/common/functions.dart';
 import 'package:quiz_maker/models/user.dart';
+import 'package:quiz_maker/services/points_service.dart';
 
 class UserService {
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
@@ -14,7 +15,7 @@ class UserService {
       'email': user.email,
       'name': user.name,
       'points': GamePoints.initial,
-      'streak': 0,
+      'streakDays': [],
       'imageUrl': null
     });
   }
@@ -27,8 +28,7 @@ class UserService {
         .get();
   }
 
-  Future<void> updateUserProfile(/*String userId,*/ String name, String? imageUrl) async {
-    //TODO: Add userId
+  Future<void> updateUserProfile(String name, String? imageUrl) async {
     final store = await LocalStore.getCurrentUserDetails(); //TODO remove
     await firestoreInstance
         .collection(Constants.usersDbDocument)
@@ -50,5 +50,20 @@ class UserService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getUsers() {
     return firestoreInstance.collection(Constants.usersDbDocument).snapshots();
+  }
+
+  Future<void> incrementPoints(int gainedPoints) async {
+    final store = await LocalStore.getCurrentUserDetails();
+    final user = store.email;
+    String date = PointsService.getCurrantDate();
+    print("Incrementing user points... for: $user, +points: $gainedPoints, day: $date");
+
+    DocumentReference userReference =
+    firestoreInstance.collection(Constants.usersDbDocument).doc(user);
+
+    userReference.update({
+      'points': FieldValue.increment(gainedPoints),
+      'streakDays': FieldValue.arrayUnion([date])
+    });
   }
 }

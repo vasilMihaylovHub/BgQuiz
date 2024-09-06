@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quiz_maker/components/text_field.dart';
+import 'package:quiz_maker/services/points_service.dart';
 import 'package:quiz_maker/services/user_service.dart';
 
 import '../components/app_bar.dart';
@@ -116,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           const SizedBox(height: 8),
                           MyTextField(
-                            text: 'Streak: ${user?['streak'] ?? 0}',
+                            text: 'Streak: ${getStreakCount(user)}',
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -131,6 +132,10 @@ class _ProfilePageState extends State<ProfilePage> {
         },
       ),
     );
+  }
+
+  int getStreakCount(Map<String, dynamic>? user){
+    return  PointsService.calculateCurrantStreak(List<String>.from(user?['streakDays'] ?? []));
   }
 
   void _showEditModal(BuildContext context, Map<String, dynamic>? user) {

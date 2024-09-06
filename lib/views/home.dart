@@ -39,7 +39,7 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0.0,
-        actions: [
+        actions: const [
           StreakIconButton(),
         ],
       ),

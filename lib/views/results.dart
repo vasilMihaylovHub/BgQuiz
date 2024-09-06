@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/common/constants.dart';
 import 'package:quiz_maker/models/result_model.dart';
+import 'package:quiz_maker/services/user_service.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
 class Results extends StatefulWidget {
@@ -14,24 +15,32 @@ class Results extends StatefulWidget {
 
 class _ResultsState extends State<Results> {
   late double successRate;
-  late int points;
+  late int gainedPoints;
   late int currPoints = 0;// Get them from the DB
 
   @override
   void initState() {
     super.initState();
     calculateSuccessRateAndPoints();
+    updateUserScore();
   }
 
   void calculateSuccessRateAndPoints() {
     successRate = widget.result.correct / widget.result.total * 100;
 
     if (successRate == 100) {
-      points = GamePoints.solvedQuiz100;
+      gainedPoints = GamePoints.solvedQuiz100;
     } else if (successRate >= 80) {
-      points = GamePoints.solvedQuiz80;
+      gainedPoints = GamePoints.solvedQuiz80;
     } else {
-      points = 0;
+      gainedPoints = 0;
+    }
+  }
+
+
+  Future<void> updateUserScore() async {
+    if(gainedPoints > 0){
+      await UserService().incrementPoints(gainedPoints);
     }
   }
 
@@ -63,7 +72,7 @@ class _ResultsState extends State<Results> {
               ),
               SizedBox(height: 14),
               Text(
-                "Спечелени точки: $points, натрупани: $currPoints",
+                "Спечелени точки: $gainedPoints, натрупани: $currPoints",
                 style: TextStyle(fontSize: 22),
                 textAlign: TextAlign.center,
               ),
