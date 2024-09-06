@@ -158,9 +158,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   radius: 40,
                   backgroundImage: (newImage != null
                       ? FileImage(newImage!)
-                      : _imagePath!= null
+                      : _imagePath != null && _imagePath!.isNotEmpty
                         ? NetworkImage( _imagePath!)
-                        : null) as ImageProvider,
+                        : null) as ImageProvider?,
                   child: _imagePath == null
                       ? const Icon(Icons.person, size: 64, color: Colors.white)
                       : null,

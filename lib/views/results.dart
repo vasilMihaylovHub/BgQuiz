@@ -22,7 +22,7 @@ class _ResultsState extends State<Results> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
             Text("${widget.result.correct}/${widget.result.total}", style: TextStyle(fontSize: 25),),
-            SizedBox(height: 8,),
+            SizedBox(height: 8),
             Text("Отговорени вярно въпроси: ${widget.result.correct} "
                 "и неправилно: ${widget.result.incorrect + widget.result.notAttempted}.", style: TextStyle(fontSize: 22),
             textAlign: TextAlign.center),
