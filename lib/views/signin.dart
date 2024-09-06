@@ -9,64 +9,66 @@ import 'package:quiz_maker/widgets/widgets.dart';
 import '../common/functions.dart';
 import 'auth/forgot_password.dart';
 
-  class SignIn extends StatefulWidget {
-    const SignIn({super.key});
+class SignIn extends StatefulWidget {
+  const SignIn({super.key});
 
-    @override
-    State<SignIn> createState() => _SignInState();
+  @override
+  State<SignIn> createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
+  final _formKey = GlobalKey<FormState>();
+  late String email, password;
+  AuthService authService = AuthService();
+
+  bool isLoading = false;
+
+  signIn() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+      await authService.signIn(email, password).then((user) {
+        if (user != null) {
+          LocalStore.saveCurrentUser(isLoggedIn: true, email: email);
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Home()));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Неуспешно влизане. Моля опитайте отново')));
+        }
+      }).whenComplete(() {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
   }
 
-  class _SignInState extends State<SignIn> {
-
-    final _formKey = GlobalKey<FormState>();
-    late String email, password;
-    AuthService authService = AuthService();
-
-    bool isLoading = false;
-
-    signIn() async {
-      if(_formKey.currentState!.validate()){
-        setState(() {
-          isLoading = true;
-        });
-        await authService.signIn(email, password)
-        .then((user) {
-          if(user != null) {
-            LocalStore.saveCurrentUser(isLoggedIn: true, email: email);
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => Home()));
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Неуспешно влизане. Моля опитайте отново'))
-            );
-          }
-          })
-        .whenComplete(() {
-          setState(() {
-            isLoading = false;
-          });
-        });
-      }
-    }
-
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          title: appBar(context),
-          centerTitle: true,
-        ),
-        body: isLoading ?
-        const Center(
-          child: CircularProgressIndicator(),
-        ) : Form(
-          key: _formKey,
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                    Icon(Icons.person, size: 80, color: Theme.of(context).colorScheme.inversePrimary),// change with logo of the game
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: appBar(context),
+        centerTitle: true,
+      ),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Form(
+              key: _formKey,
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.person,
+                        size: 80,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .inversePrimary), // change with logo of the game
                     const SizedBox(height: 45),
                     TextFormField(
                       validator: (val) {
@@ -115,41 +117,31 @@ import 'auth/forgot_password.dart';
                             child: const MyTextField(
                                 text: 'Забравена парола',
                                 fontWeight: FontWeight.bold,
-                                textDecoration: TextDecoration.underline
-                            ),
+                                textDecoration: TextDecoration.underline),
                           ),
-
-                          Row(
-                            children: [
-                              const MyTextField(
-                                  text: 'Нямаш регистрация? '
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => SignUp()));
-                                },
-                                child: const MyTextField(
-                                    text: 'Регистрация',
-                                    fontWeight: FontWeight.bold,
-                                    textDecoration: TextDecoration.underline
-                                ),
-                              )
-                            ],
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SignUp()));
+                            },
+                            child: const MyTextField(
+                                text: 'Регистрация',
+                                fontWeight: FontWeight.bold,
+                                textDecoration: TextDecoration.underline),
                           ),
                         ],
                       ),
                     ),
                     SizedBox(height: 10),
-                    SignInProviders(onProviderTab: (provider) {authService.signInWithGoogle();})
+                    SignInProviders(onProviderTab: (provider) {
+                      authService.signInWithGoogle();
+                    })
                   ],
+                ),
+              ),
             ),
-          ),
-        ),
-      );
-    }
+    );
   }
-
-    
+}

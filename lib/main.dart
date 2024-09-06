@@ -51,6 +51,6 @@ class _MyAppState extends State<MyApp> {
       ),
       theme: lightMode,
       darkTheme: darkMode,
-      debugShowCheckedModeBanner: false
+      debugShowCheckedModeBanner: false,
     );  }
 }

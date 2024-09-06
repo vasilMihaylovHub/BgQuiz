@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_maker/components/text_field.dart';
 import 'package:quiz_maker/services/auth_service.dart';
 import 'package:quiz_maker/services/user_service.dart';
 import 'package:quiz_maker/views/signin.dart';
@@ -51,6 +52,7 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: appBar(context),
         centerTitle: true,
@@ -126,16 +128,19 @@ class _SignUpState extends State<SignUp> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Вече си регистриран? ",
-                    style: TextStyle(fontSize: 16),),
+                  const MyTextField(
+                    text: "Вече си регистриран? "
+                  ),
                   GestureDetector(
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => SignIn()
                             ));
                       },
-                      child: Text("Влез", style: TextStyle(
-                          fontSize: 16, decoration: TextDecoration.underline)))
+                      child: const MyTextField(text: 'Влез',
+                          fontWeight: FontWeight.bold,
+                          textDecoration: TextDecoration.underline),
+                  )
                 ],
               ),
               SizedBox(height: 80,)
