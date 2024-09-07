@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quiz_maker/components/text_field.dart';
+import 'package:quiz_maker/main.dart';
 import 'package:quiz_maker/services/points_service.dart';
 import 'package:quiz_maker/services/user_service.dart';
 
@@ -86,9 +87,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     _showEditModal(context, user);
                                   },
                                   icon: Icon(Icons.edit),
-                                  label: Text('Edit Profile'),
+                                  label: MyTextField(text: 'Edit Profile'),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                                    backgroundColor: Colors.blue,
                                   ),
                                 ),
                               ],
@@ -100,30 +101,45 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(height: 20),
                   // Ranking Info Section
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    elevation: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          MyTextField(
-                            text: 'Points: ${user?['points'] ?? 0}',
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        elevation: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              MyTextField(
+                                text: 'Points: ${user?['points'] ?? 0}',
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              const SizedBox(height: 8),
+                              MyTextField(
+                                text: 'Streak: ${getStreakCount(user)}',
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 8),
-                          MyTextField(
-                            text: 'Streak: ${getStreakCount(user)}',
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          _showInviteFriendModal(context);
+                        },
+                        icon: Icon(Icons.mail_outline),
+                        label: MyTextField(text: 'Invite a Friend'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -132,6 +148,53 @@ class _ProfilePageState extends State<ProfilePage> {
         },
       ),
     );
+  }
+
+
+  void _showInviteFriendModal(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Invite a Friend'),
+          content: TextField(
+            controller: emailController,
+            decoration: InputDecoration(
+              labelText: 'Enter friend\'s email',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: MyTextField(text: 'Cancel',),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                String email = emailController.text;
+                if (email.isNotEmpty) {
+                  _sendInvitation(email);
+                  Navigator.of(context).pop();
+                }
+              },
+              child: const MyTextField(text: 'Send Invitation'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                )
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _sendInvitation(String email) {
+    logger.w('User try to invite a friend: $email');
+    //TODO Implement when the app is hosted
   }
 
   int getStreakCount(Map<String, dynamic>? user){
@@ -147,7 +210,7 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Profile'),
+          title: const MyTextField(text: 'Edit Profile'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
