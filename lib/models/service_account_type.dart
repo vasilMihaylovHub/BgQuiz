@@ -1,3 +1,4 @@
 enum TokenType {
-  logger_sa
+  logger_sa,
+  gemini_api_key,
 }

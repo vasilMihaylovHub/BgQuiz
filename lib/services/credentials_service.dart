@@ -8,7 +8,7 @@ import '../models/service_account_type.dart';
 class CredentialsService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<Object?> getToken(TokenType searchType) async {
+  Future<Map<String, dynamic>?> getToken(TokenType searchType) async {
      var document = await _db
         .collection(Constants.credentialsDbDocument)
         .doc(searchType.name)

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_maker/components/text_field.dart';
+import 'package:quiz_maker/services/credentials_service.dart';
+import '../models/service_account_type.dart';
 
 class ChatState with ChangeNotifier {
   List<Content> chatMessages = [];
@@ -13,9 +15,11 @@ class ChatState with ChangeNotifier {
   }
 }
 
-const apiKey = 'AIzaSyAyD_SpwXDt2koaJ4lnXEGW57JAvRDGFLU'; // TODO get it from the credentials doc
-
 class ChatBottomSheet extends StatefulWidget {
+  final String geminiKey;
+
+  ChatBottomSheet(this.geminiKey);
+
   @override
   _ChatBottomSheetState createState() => _ChatBottomSheetState();
 }
@@ -32,7 +36,7 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
   void initState() {
     super.initState();
     _model = GenerativeModel(
-      model: 'gemini-pro', apiKey: apiKey,
+      model: 'gemini-pro', apiKey: widget.geminiKey,
     );
     _chat = _model.startChat();
   }
@@ -68,28 +72,6 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
     setState(() {
       _loading = false;
     });
-  }
-
-  void _showError(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Something went wrong'),
-          content: SingleChildScrollView(
-            child: SelectableText(message),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            )
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -232,7 +214,9 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
   }
 }
 
-void openChatBottomSheet(BuildContext context) {
+Future<void> openChatBottomSheet(BuildContext context) async {
+
+  Map<String, dynamic>? tokenMap = await CredentialsService().getToken(TokenType.gemini_api_key);
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -242,7 +226,7 @@ void openChatBottomSheet(BuildContext context) {
     builder: (context) {
       return ChangeNotifierProvider(
         create: (context) => ChatState(),
-        child: ChatBottomSheet(),
+        child: ChatBottomSheet(tokenMap!['token']),
       );
     },
   );
