@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../components/app_bar.dart';
+import 'package:quiz_maker/components/text_field.dart';
 import '../../main.dart';
 
 class GlobalErrorHandler extends StatefulWidget {
@@ -13,23 +12,36 @@ class GlobalErrorHandler extends StatefulWidget {
 }
 
 class _GlobalErrorHandlerState extends State<GlobalErrorHandler> {
-  // Error handling logic
+
   void onError(FlutterErrorDetails errorDetails) {
-    // Add your error handling logic here, e.g., logging, reporting to a server, etc.
     logger.e('Caught error: ${errorDetails.exception}');
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const MyTextField(text: 'Грешка', fontSize: 20,),
+          content: const MyTextField(text:
+            'Нещо се обърка. Моля опитайте отново. Екипът работи по отстраняване на проблема.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const MyTextField(text: 'OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return ErrorWidgetBuilder(
       builder: (context, errorDetails) {
-        // Display a user-friendly error screen
-        return Scaffold(
-          appBar: const MyAppBar(title: 'Грешка'),
-          body: const Center(
-            child: Text('Нещо се обърка. Моля опитайте отново.'),
-          ),
-        );
+        return widget.child;
       },
       onError: onError,
       child: widget.child,
@@ -56,7 +68,6 @@ class _ErrorWidgetBuilderState extends State<ErrorWidgetBuilder> {
   @override
   void initState() {
     super.initState();
-    // Set up global error handling
     FlutterError.onError = widget.onError;
   }
 
