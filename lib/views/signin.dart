@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/components/signin_providers.dart';
 import 'package:quiz_maker/components/text_field.dart';
+import 'package:quiz_maker/main.dart';
 import 'package:quiz_maker/services/auth_service.dart';
 import 'package:quiz_maker/views/home.dart';
 import 'package:quiz_maker/views/signup.dart';
@@ -30,6 +31,7 @@ class _SignInState extends State<SignIn> {
         isLoading = true;
       });
       await authService.signIn(email, password).then((user) {
+        logger.i("signIn response: $user");
         if (user != null) {
           LocalStore.saveCurrentUser(isLoggedIn: true, email: email);
           Navigator.pushReplacement(

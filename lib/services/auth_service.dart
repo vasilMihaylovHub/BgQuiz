@@ -1,22 +1,26 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:quiz_maker/main.dart';
 
 class AuthService {
   FirebaseAuth authInstance = FirebaseAuth.instance;
 
   Future<User?> signIn(String email, String password) async {
+    logger.i("Try to signIn:  $email");
     UserCredential authResult = await authInstance.signInWithEmailAndPassword(
         email: email, password: password);
     return authResult.user;
   }
 
   Future signUp(String email, String password) async {
+
     UserCredential authResult = await authInstance
         .createUserWithEmailAndPassword(email: email, password: password);
     return authResult.user;
   }
 
   Future<void> signOut() async {
+    logger.i("signing out...");
     return authInstance.signOut();
   }
 

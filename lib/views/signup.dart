@@ -5,6 +5,7 @@ import 'package:quiz_maker/services/user_service.dart';
 import 'package:quiz_maker/views/signin.dart';
 
 import '../common/functions.dart';
+import '../main.dart';
 import '../models/user.dart';
 import '../widgets/widgets.dart';
 import 'home.dart';

@@ -4,6 +4,7 @@ class Constants {
   static const String usersDbDocument = "users";
   static const String quizzesDbDocument = "quizzes";
   static const String questionsDbDocument = "questions";
+  static const String serviceAccountsDbDocument = "service_accounts";
 }
 
 class GamePoints {
