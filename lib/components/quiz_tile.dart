@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/components/quiz_cover_image.dart';
 import 'package:quiz_maker/components/text_field.dart';
 
+import '../common/functions.dart';
 import '../models/quiz.dart';
-import '../services/auth_service.dart';
 import '../services/quizz_service.dart';
 import '../views/add_question.dart';
 import '../views/play_quiz.dart';
@@ -23,14 +22,21 @@ class QuizTile extends StatefulWidget {
 class _QuizTileState extends State<QuizTile> {
   bool isLiked = false;
   bool showActions = false;
-  final currentUser = FirebaseAuth.instance.currentUser;
+  late String currentUserMail;
 
   @override
   void initState() {
     super.initState();
+    _loadCurrentUserDetails();
+  }
 
-    showActions = currentUser?.email == widget.quiz.creatorEmail;
-    isLiked = widget.quiz.likes.contains(currentUser?.email ?? "");
+  void _loadCurrentUserDetails() async {
+    Store currentUser = await LocalStore.getCurrentUserDetails();
+    setState(() {
+      currentUserMail = currentUser.email!;
+      showActions = currentUserMail == widget.quiz.creatorEmail;
+      isLiked = widget.quiz.likes.contains(currentUserMail);
+    });
   }
 
   toggleLike() {
@@ -38,12 +44,11 @@ class _QuizTileState extends State<QuizTile> {
       isLiked = !isLiked;
     });
 
-    final currUserMail = AuthService().authInstance.currentUser!.email!;
 
     if (isLiked) {
-      QuizService().likeQuiz(widget.quiz.id, currUserMail);
+      QuizService().likeQuiz(widget.quiz.id, currentUserMail);
     } else {
-      QuizService().dislikeQuiz(widget.quiz.id, currUserMail);
+      QuizService().dislikeQuiz(widget.quiz.id, currentUserMail);
     }
   }
 

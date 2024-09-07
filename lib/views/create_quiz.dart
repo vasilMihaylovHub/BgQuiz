@@ -22,24 +22,22 @@ class CreateQuiz extends StatefulWidget {
 class _CreateQuizState extends State<CreateQuiz> {
   final _formKey = GlobalKey<FormState>();
   late String quizTitle, quizDesc;
-  File? quizImgFile; // Replace quizImgUrl with a File
+  File? quizImgFile;
   bool isLoading = false;
   QuizService databaseService = QuizService();
   AuthService authService = AuthService();
 
-  final ImagePicker _picker = ImagePicker(); // Add ImagePicker instance
+  final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        quizImgFile = File(pickedFile.path); // Store the file
+        quizImgFile = File(pickedFile.path);
       });
     }
   }
 
-  // You can still convert this image file into a URL before uploading the quiz
-  // Assuming you handle the image upload in your QuizService.
 
   createQuiz() async {
     if (_formKey.currentState?.validate() == true) {
@@ -89,9 +87,8 @@ class _CreateQuizState extends State<CreateQuiz> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              // Image picker widget replacing the text field
               GestureDetector(
-                onTap: _pickImage, // Open gallery to pick image
+                onTap: _pickImage,
                 child: Container(
                   height: 150,
                   width: 150,

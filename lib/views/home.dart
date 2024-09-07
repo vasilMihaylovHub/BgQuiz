@@ -16,7 +16,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool userLoading = true;
   TextEditingController searchController = TextEditingController();
   String searchQuery = "";
 
