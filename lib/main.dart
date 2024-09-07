@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:quiz_maker/common/functions.dart';
@@ -19,13 +20,15 @@ void main() async {
 
   await googleCloudLoggingService.setupLoggingApi();
   Logger.addOutputListener((event) async {
-    final user = await LocalStore.getCurrentUserDetails();
-    googleCloudLoggingService.writeLog(
-      level: event.level,
-      message: event.lines.join('\n'),
-      userMail: user.email,
-    );
-    debugPrint('App will log output to Cloud Logging');
+    if (kReleaseMode) {
+      final user = await LocalStore.getCurrentUserDetails();
+      googleCloudLoggingService.writeLog(
+        level: event.level,
+        message: event.lines.join('\n'),
+        userMail: user.email,
+      );
+      debugPrint('App will log output to Cloud Logging');
+    }
   });
 
   await Firebase.initializeApp(
