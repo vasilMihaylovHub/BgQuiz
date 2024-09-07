@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io'; // For File handling
 import 'package:quiz_maker/common/constants.dart';
 import 'package:quiz_maker/models/quiz.dart';
+import 'package:quiz_maker/services/asset_service.dart';
 import 'package:quiz_maker/services/quizz_service.dart';
 import 'package:quiz_maker/services/auth_service.dart';
 
@@ -18,88 +21,114 @@ class CreateQuiz extends StatefulWidget {
 
 class _CreateQuizState extends State<CreateQuiz> {
   final _formKey = GlobalKey<FormState>();
-  late String quizTitle, quizDesc, quizImgUrl;//TODO quizImgUrl with img picker
+  late String quizTitle, quizDesc;
+  File? quizImgFile; // Replace quizImgUrl with a File
   bool isLoading = false;
   QuizService databaseService = QuizService();
   AuthService authService = AuthService();
 
+  final ImagePicker _picker = ImagePicker(); // Add ImagePicker instance
+
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        quizImgFile = File(pickedFile.path); // Store the file
+      });
+    }
+  }
+
+  // You can still convert this image file into a URL before uploading the quiz
+  // Assuming you handle the image upload in your QuizService.
 
   createQuiz() async {
-
     if (_formKey.currentState?.validate() == true) {
       setState(() {
         isLoading = true;
       });
       final currentUser = await authService.getCurrentUser();
 
-      final newQuiz = Quiz(
-        name: quizTitle,
-        imgUrl: quizImgUrl,
-        description: quizDesc,
-        creatorEmail: currentUser?.email ?? Constants.defaultMail,
-        likes: []
-      );
-      await UserService().incrementPoints(0);//to activate streak
+      // Here we upload the image file and get the URL
+      final imageUrl = await AssetService().uploadImage(quizImgFile!);
 
-      databaseService.createQuiz(newQuiz)
-      .then((creationSuccess) {
+      final newQuiz = Quiz(
+          name: quizTitle,
+          imgUrl: imageUrl,
+          description: quizDesc,
+          creatorEmail: currentUser?.email ?? Constants.defaultMail,
+          likes: []
+      );
+      await UserService().incrementPoints(0); // to activate streak
+
+      databaseService.createQuiz(newQuiz).then((creationSuccess) {
         setState(() {
           isLoading = false;
         });
-        if(creationSuccess) {
+        if (creationSuccess) {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(
-              builder: (context) => AddQuestion(quizId: newQuiz.id))
-          );
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddQuestion(quizId: newQuiz.id)));
         } else {
-
           ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Неуспешно създаван на тест. Моля опитайте отново'))
-          );
+              const SnackBar(content: Text('Неуспешно създаван на тест. Моля опитайте отново')));
         }
       });
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const MyAppBar(title: 'Създаване на тест'),
+      appBar: const MyAppBar(title: 'Създаване на тест'),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(hintText: "Профилна снимка, URL"),
-                onChanged: (val) {
-                  quizImgUrl = val;
-                },
+              // Image picker widget replacing the text field
+              GestureDetector(
+                onTap: _pickImage, // Open gallery to pick image
+                child: Container(
+                  height: 150,
+                  width: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: quizImgFile != null
+                      ? Image.file(
+                    quizImgFile!,
+                    fit: BoxFit.cover,
+                  )
+                      : const Icon(Icons.add_a_photo, size: 50),
+                ),
               ),
+              const SizedBox(height: 16),
               TextFormField(
-                decoration: InputDecoration(hintText: "Заглавие"),
+                decoration: const InputDecoration(hintText: "Заглавие"),
                 onChanged: (val) {
                   quizTitle = val;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: "Описание"),
+                decoration: const InputDecoration(hintText: "Описание"),
                 onChanged: (val) {
                   quizDesc = val;
                 },
               ),
-              Spacer(),
+              const Spacer(),
               GestureDetector(
-                  onTap: () {
-                    createQuiz();
-                  },
-                  child: blueButton(context: context,label: "Създай")
+                onTap: () {
+                  createQuiz();
+                },
+                child: blueButton(context: context, label: "Създай"),
               ),
-              const SizedBox(height: 60)
+              const SizedBox(height: 60),
             ],
           ),
         ),

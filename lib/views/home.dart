@@ -95,7 +95,12 @@ class _HomeState extends State<Home> {
               itemCount: quizzes.length,
               itemBuilder: (context, index) {
                 var quiz = quizzes[index];
-                return QuizTile(quiz);
+                return Column(
+                  children: [
+                    QuizTile(quiz),
+                    const SizedBox(height: 20),
+                  ],
+                );
               },
             );
           }
