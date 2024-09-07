@@ -210,7 +210,7 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const MyTextField(text: 'Edit Profile'),
+          title: const MyTextField(text: 'Edit Profile', fontSize: 20),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

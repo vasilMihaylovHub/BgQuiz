@@ -50,8 +50,10 @@ class UserService {
     });
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getUsers() {
-    return firestoreInstance.collection(Constants.usersDbDocument).snapshots();
+  Stream<QuerySnapshot<Map<String, dynamic>>> getUsersRanked() {
+    return firestoreInstance.collection(Constants.usersDbDocument)
+        .orderBy('points', descending: true)
+        .snapshots();
   }
 
   Future<void> incrementPoints(int gainedPoints) async {

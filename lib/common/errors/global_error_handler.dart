@@ -17,8 +17,10 @@ class _GlobalErrorHandlerState extends State<GlobalErrorHandler> {
   void onError(FlutterErrorDetails errorDetails) {
     var uuid = const Uuid();
     String uniqueId = uuid.v4();
-    logger.e('Caught error UUID: $uniqueId, error: ${errorDetails.exception}');
-
+    logger.e('Caught error with UUID: $uniqueId, error: ${errorDetails.exception} \n,'
+        'Stacktrace: ${errorDetails.stack.toString()}');
+    bool showError = false;
+    if(!showError) return;
     showDialog(
       context: context,
       builder: (BuildContext context) {
