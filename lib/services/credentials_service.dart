@@ -1,28 +1,33 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:quiz_maker/main.dart';
 
 import '../common/constants.dart';
+import '../main.dart';
 import '../models/service_account_type.dart';
 
 class CredentialsService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<String?> getServiceAccount(ServiceAccountType searchType) async {
+  Future<Object?> getToken(TokenType searchType) async {
+     var document = await _db
+        .collection(Constants.credentialsDbDocument)
+        .doc(searchType.name)
+        .get();
+
+    return document.data();
+  }
+
+  Future<bool> insertToken(TokenType type, Map<String, dynamic> token) async {
+
     try {
-      // Query the service_accounts collection where 'type' matches searchType.name
-      QuerySnapshot querySnapshot = await _db
-          .collection(Constants.serviceAccountsDbDocument)
-          .where('type', isEqualTo: searchType.name)
-          .get();
-
-      var document = querySnapshot.docs.first;
-      String credentials = document.get('credentials');
-
-      return credentials;
-    } catch (e) {
-      logger.e('Error getting service account: $e');
-      return null;
+      await _db
+          .collection(Constants.credentialsDbDocument)
+          .doc(type.name)
+          .set(token);
+      return true;
+    } on Exception catch (e) {
+      logger.e(e.toString());
+      return false;
     }
   }
 }

@@ -1,10 +1,11 @@
 class Constants {
   static const int databaseResponseTimeSeconds = 3;
+  static const String projectId = 'bgquiz-ef282';
   static const String defaultMail = "mail@not.found";
   static const String usersDbDocument = "users";
   static const String quizzesDbDocument = "quizzes";
   static const String questionsDbDocument = "questions";
-  static const String serviceAccountsDbDocument = "service_accounts";
+  static const String credentialsDbDocument = "credentials";
 }
 
 class GamePoints {

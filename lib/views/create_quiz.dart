@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io'; // For File handling
-import 'package:quiz_maker/common/constants.dart';
+import 'dart:io';
 import 'package:quiz_maker/models/quiz.dart';
 import 'package:quiz_maker/services/asset_service.dart';
 import 'package:quiz_maker/services/quizz_service.dart';

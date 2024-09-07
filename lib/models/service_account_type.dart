@@ -1,3 +1,3 @@
-enum ServiceAccountType {
-  logger
+enum TokenType {
+  logger_sa
 }

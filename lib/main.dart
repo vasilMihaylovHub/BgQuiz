@@ -18,6 +18,10 @@ final googleCloudLoggingService = GoogleCloudLoggingService();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   await googleCloudLoggingService.setupLoggingApi();
   Logger.addOutputListener((event) async {
     if (kReleaseMode) {
@@ -31,9 +35,6 @@ void main() async {
     }
   });
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   logger.i('App started');
   runApp(const MyApp());
 }
