@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../components/app_bar.dart';
 import '../models/question.dart';
 import '../services/quizz_service.dart';
+import '../widgets/chat_sheet.dart';
 import '../widgets/widgets.dart';
 
 class AddQuestion extends StatefulWidget {
@@ -68,49 +69,6 @@ class _AddQuestionState extends State<AddQuestion> {
     }
 
     return savedSuccessFully;
-  }
-
-  void _openChatBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      isScrollControlled: true,
-      builder: (context) {
-        return FractionallySizedBox(
-          heightFactor: 0.8,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                const Text(
-                  'Chat with AI',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                Expanded(
-                  child: ListView(
-                    children: [
-                      // Add your chat messages here.
-                      const Text('AI: How can I help you today?'),
-                    ],
-                  ),
-                ),
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Type your message...',
-                    border: OutlineInputBorder(),
-                  ),
-                  onSubmitted: (message) {
-                    // Handle sending message to AI API
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -208,7 +166,7 @@ class _AddQuestionState extends State<AddQuestion> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _openChatBottomSheet(context);
+          openChatBottomSheet(context);
         },
         child: const Icon(Icons.chat),
         backgroundColor: Colors.blue,
