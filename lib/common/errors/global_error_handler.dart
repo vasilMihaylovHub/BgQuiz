@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../components/app_bar.dart';
+import '../../main.dart';
 
 class GlobalErrorHandler extends StatefulWidget {
   final Widget child;
@@ -15,7 +16,7 @@ class _GlobalErrorHandlerState extends State<GlobalErrorHandler> {
   // Error handling logic
   void onError(FlutterErrorDetails errorDetails) {
     // Add your error handling logic here, e.g., logging, reporting to a server, etc.
-    print('Caught error: ${errorDetails.exception}');
+    logger.e('Caught error: ${errorDetails.exception}');
   }
 
   @override

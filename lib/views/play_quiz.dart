@@ -6,7 +6,7 @@ import 'package:quiz_maker/views/results.dart';
 import 'package:quiz_maker/widgets/quiz_play_widget.dart';
 
 import '../components/app_bar.dart';
-import '../widgets/widgets.dart';
+import '../main.dart';
 
 class PlayQuiz extends StatefulWidget {
   final String quizId;
@@ -27,7 +27,7 @@ class _PlayQuizState extends State<PlayQuiz> {
   @override
   void initState() {
     _db.getQuestionsForQuiz(widget.quizId).then((val) {
-      print("Questions are:  ${val.length}.");
+      logger.i("Questions are:  ${val.length}.");
       setState(() {
         _questions = val;
         _notAttempted = val.length;

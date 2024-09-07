@@ -47,7 +47,7 @@ class AuthService {
        await authInstance.sendPasswordResetEmail(email: email);
        return Future.value(true);
     } on Exception catch (e){
-      print( "[resetPassword] "+ e.toString());
+      logger.e( "[resetPassword] "+ e.toString());
       return Future.value(false);
     }
   }

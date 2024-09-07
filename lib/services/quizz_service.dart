@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../common/constants.dart';
+import '../main.dart';
 import '../models/question.dart';
 import '../models/quiz.dart';
 
@@ -20,7 +19,7 @@ class QuizService {
   }
 
   Future<bool> createQuiz(Quiz quiz) async {
-    print("Creating quiz: ${quiz.name}");
+    logger.i("Creating quiz: ${quiz.name}");
 
     try {
       await _db
@@ -29,18 +28,18 @@ class QuizService {
           .set(quiz.toJson());
       return true;
     } on Exception catch (e) {
-      print(e.toString());
+      logger.e(e.toString());
       return false;
     }
   }
 
   Future<void> deleteQuiz(String quizId) {
-    print("Delete quiz $quizId");
+    logger.i("Delete quiz $quizId");
     return _db.collection(Constants.quizzesDbDocument).doc(quizId).delete();
   }
 
   Future<bool> addQuestion(Question question) async {
-    print("Add question ${question.toString()}");
+    logger.i("Add question ${question.toString()}");
 
     try {
       await _db
@@ -49,13 +48,13 @@ class QuizService {
           .set(question.toJson());
       return true;
     } on Exception catch (ex) {
-      print("Error in addQuestion: $ex");
+      logger.e("Error in addQuestion: $ex");
       return false;
     }
   }
 
   Future<List<Question>> getQuestionsForQuiz(String quizId) async {
-    print("getQuestionsForQuiz $quizId");
+    logger.i("getQuestionsForQuiz $quizId");
 
     QuerySnapshot querySnapshot = await _db
         .collection(Constants.questionsDbDocument)
@@ -75,7 +74,7 @@ class QuizService {
   }
 
   void likeQuiz(String quizId, String currUserMail) async {
-    print("liking... $quizId");
+    logger.i("liking... $quizId");
 
     DocumentReference quizReference =
         _db.collection(Constants.quizzesDbDocument).doc(quizId);
@@ -86,7 +85,7 @@ class QuizService {
   }
 
   void dislikeQuiz(String quizId, String currUserMail) {
-    print("liking... $quizId");
+    logger.i("liking... $quizId");
 
     DocumentReference quizReference =
         _db.collection(Constants.quizzesDbDocument).doc(quizId);

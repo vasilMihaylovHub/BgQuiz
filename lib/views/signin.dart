@@ -8,7 +8,6 @@ import 'package:quiz_maker/views/signup.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
 import '../common/functions.dart';
-import '../components/app_bar.dart';
 import 'auth/forgot_password.dart';
 
 class SignIn extends StatefulWidget {

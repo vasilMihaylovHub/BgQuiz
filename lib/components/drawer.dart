@@ -6,12 +6,17 @@ import '../common/functions.dart';
 import '../services/auth_service.dart';
 import '../views/signin.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
 
-  AuthService authService = AuthService();// Dependancy Injection
 
-  MyDrawer({super.key});
+  const MyDrawer({super.key});
 
+  @override
+  State<MyDrawer> createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
+  AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return Drawer(

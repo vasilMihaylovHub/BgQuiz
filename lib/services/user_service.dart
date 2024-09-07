@@ -4,6 +4,8 @@ import 'package:quiz_maker/common/functions.dart';
 import 'package:quiz_maker/models/user.dart';
 import 'package:quiz_maker/services/points_service.dart';
 
+import '../main.dart';
+
 class UserService {
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
 
@@ -56,7 +58,7 @@ class UserService {
     final store = await LocalStore.getCurrentUserDetails();
     final user = store.email;
     String date = PointsService.getCurrantDate();
-    print("Incrementing user points... for: $user, +points: $gainedPoints, day: $date");
+    logger.i("Incrementing user points... for: $user, +points: $gainedPoints, day: $date");
 
     DocumentReference userReference =
     firestoreInstance.collection(Constants.usersDbDocument).doc(user);

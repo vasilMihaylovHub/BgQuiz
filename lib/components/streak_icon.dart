@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/services/points_service.dart';
 import 'package:quiz_maker/services/user_service.dart';
+import '../main.dart';
 import '../views/profile.dart';
 
 class StreakIconButton extends StatelessWidget {
@@ -14,7 +15,7 @@ class StreakIconButton extends StatelessWidget {
       int counter = PointsService.calculateCurrantStreak(streakDays);
       return {'activeToday': activeToday, 'counter': counter};
     } catch (e) {
-      print('Error loading streak: $e');
+      logger.e('Error loading streak: $e');
       return {'activeToday': false, 'counter': 0};
     }
   }
