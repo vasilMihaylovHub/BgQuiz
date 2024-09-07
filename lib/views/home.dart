@@ -82,10 +82,7 @@ class _HomeState extends State<Home> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Грешка: ${snapshot.error}'));
           } else {
-            // Filter quizzes based on search query
             var quizzes = snapshot.data!.where((quiz) {
               return quiz.name.toLowerCase().contains(searchQuery.toLowerCase());
             }).toList();
