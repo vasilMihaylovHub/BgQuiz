@@ -7,6 +7,7 @@ class Quiz {
   String description;
   String creatorEmail;
   List<String> likes;
+  List<String> solved;
 
   Quiz({
     String? id,
@@ -15,6 +16,7 @@ class Quiz {
     required this.description,
     required this.creatorEmail,
     required this.likes,
+    required this.solved,
   }): id = id ?? DateTime.now().microsecondsSinceEpoch.toString();
 
   factory Quiz.fromFirestore(DocumentSnapshot doc) {
@@ -26,6 +28,7 @@ class Quiz {
       description: data['quizDescription'],
       creatorEmail: data['creatorEmail'],
       likes: List<String>.from(data['likes'] ?? []),
+      solved: List<String>.from(data['solved'] ?? []),
     );
   }
 
@@ -36,6 +39,7 @@ class Quiz {
       'quizDescription': description,
       'creatorEmail': creatorEmail,
       'likes': likes,
+      'solved': solved,
     };
   }
 }

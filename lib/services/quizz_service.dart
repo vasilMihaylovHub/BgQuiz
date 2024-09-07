@@ -84,6 +84,17 @@ class QuizService {
     });
   }
 
+  Future<void> solvedQuiz(String quizId, String currUserMail) async {
+    logger.i("Solved $quizId, by: $currUserMail");
+
+    DocumentReference quizReference =
+        _db.collection(Constants.quizzesDbDocument).doc(quizId);
+
+    return quizReference.update({
+      'solved': FieldValue.arrayUnion([currUserMail])
+    });
+  }
+
   void dislikeQuiz(String quizId, String currUserMail) {
     logger.i("liking... $quizId");
 

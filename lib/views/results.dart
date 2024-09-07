@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_maker/common/constants.dart';
 import 'package:quiz_maker/models/result_model.dart';
+import 'package:quiz_maker/services/quizz_service.dart';
 import 'package:quiz_maker/services/user_service.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
@@ -41,6 +42,7 @@ class _ResultsState extends State<Results> {
   Future<void> updateUserScore() async {
     if(gainedPoints > 0){
       await UserService().incrementPoints(gainedPoints);
+      await QuizService().solvedQuiz(widget.result.quizId, widget.result.userMail);
     }
   }
 

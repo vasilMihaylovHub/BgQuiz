@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_maker/components/text_field.dart';
 
 class OptionTile extends StatefulWidget {
   final String option, description, correctAnswer, optionSelected;
@@ -33,8 +34,8 @@ class _OptionTileState extends State<OptionTile> {
             ),
           ),
           SizedBox(width: 8),
-          Text(widget.description,
-              style: TextStyle(fontSize: 18, color: Colors.black54))
+          MyTextField(text: widget.description,
+          fontSize: 18)
         ],
       ),
     );
@@ -45,6 +46,6 @@ class _OptionTileState extends State<OptionTile> {
         ? (widget.optionSelected == widget.correctAnswer
             ? Colors.green.withOpacity(0.7)
             : Colors.red.withOpacity(0.7))
-        : Colors.grey;
+        : Theme.of(context).colorScheme.inversePrimary;
   }
 }

@@ -6,6 +6,7 @@ import 'package:quiz_maker/services/quizz_service.dart';
 import 'package:quiz_maker/views/create_quiz.dart';
 import 'package:quiz_maker/widgets/widgets.dart';
 
+import '../common/functions.dart';
 import '../components/quiz_tile.dart';
 
 class Home extends StatefulWidget {
@@ -18,14 +19,24 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   TextEditingController searchController = TextEditingController();
   String searchQuery = "";
+  late String userEmail;
 
   @override
   void initState() {
     super.initState();
+    _loadCurrentUser();
     searchController.addListener(() {
       setState(() {
         searchQuery = searchController.text;
       });
+    });
+  }
+
+  void _loadCurrentUser() async {
+
+    Store currentUser = await LocalStore.getCurrentUserDetails();
+    setState(() {
+      userEmail = currentUser.email!;
     });
   }
 
@@ -96,7 +107,7 @@ class _HomeState extends State<Home> {
                 var quiz = quizzes[index];
                 return Column(
                   children: [
-                    QuizTile(quiz),
+                    QuizTile(quiz, userEmail),
                     const SizedBox(height: 20),
                   ],
                 );

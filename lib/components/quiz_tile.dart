@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:quiz_maker/components/quiz_cover_image.dart';
 import 'package:quiz_maker/components/text_field.dart';
 
-import '../common/functions.dart';
 import '../models/quiz.dart';
 import '../services/quizz_service.dart';
 import '../views/add_question.dart';
@@ -12,30 +11,30 @@ import 'like_button.dart';
 
 class QuizTile extends StatefulWidget {
   final Quiz quiz;
+  final String currentUserMail;
 
-  QuizTile(this.quiz, {super.key});
+  QuizTile(this.quiz, this.currentUserMail, {super.key});
 
   @override
   State<QuizTile> createState() => _QuizTileState();
 }
 
 class _QuizTileState extends State<QuizTile> {
-  bool isLiked = false;
-  bool showActions = false;
-  late String currentUserMail;
+  late bool isLiked;
+  late bool showActions;
+  late bool isCompleted;
 
   @override
   void initState() {
     super.initState();
-    _loadCurrentUserDetails();
+    _setQuizOptions();
   }
 
-  void _loadCurrentUserDetails() async {
-    Store currentUser = await LocalStore.getCurrentUserDetails();
+  void _setQuizOptions() {
     setState(() {
-      currentUserMail = currentUser.email!;
-      showActions = currentUserMail == widget.quiz.creatorEmail;
-      isLiked = widget.quiz.likes.contains(currentUserMail);
+      showActions = widget.currentUserMail == widget.quiz.creatorEmail;
+      isLiked = widget.quiz.likes.contains(widget.currentUserMail);
+      isCompleted = widget.quiz.solved.contains(widget.currentUserMail);//change
     });
   }
 
@@ -46,9 +45,9 @@ class _QuizTileState extends State<QuizTile> {
 
 
     if (isLiked) {
-      QuizService().likeQuiz(widget.quiz.id, currentUserMail);
+      QuizService().likeQuiz(widget.quiz.id, widget.currentUserMail);
     } else {
-      QuizService().dislikeQuiz(widget.quiz.id, currentUserMail);
+      QuizService().dislikeQuiz(widget.quiz.id, widget.currentUserMail);
     }
   }
 
@@ -68,7 +67,7 @@ class _QuizTileState extends State<QuizTile> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PlayQuiz(widget.quiz.id),
+            builder: (context) => PlayQuiz(widget.quiz.id, widget.currentUserMail),
           ),
         );
       },
@@ -90,7 +89,6 @@ class _QuizTileState extends State<QuizTile> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                // Adjust padding as needed
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -100,14 +98,24 @@ class _QuizTileState extends State<QuizTile> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            if (isCompleted)
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: 8.0),
+                                child: Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                  size: 23,
+                                ),
+                              ),
+
                             MyTextField(
                               text: widget.quiz.name,
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
-                            SizedBox(height: 8.0),
+                            const SizedBox(height: 8.0),
                             MyTextField(text: widget.quiz.description),
-                            SizedBox(height: 16.0)
+                            const SizedBox(height: 16.0)
                           ],
                         ),
                         SizedBox(

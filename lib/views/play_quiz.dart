@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_maker/components/text_field.dart';
 import 'package:quiz_maker/models/question.dart';
 import 'package:quiz_maker/models/result_model.dart';
 import 'package:quiz_maker/services/quizz_service.dart';
@@ -10,8 +11,9 @@ import '../main.dart';
 
 class PlayQuiz extends StatefulWidget {
   final String quizId;
+  final String currentUserMail;
 
-  const PlayQuiz(this.quizId);
+  const PlayQuiz(this.quizId, this.currentUserMail);
 
   @override
   State<PlayQuiz> createState() => _PlayQuizState();
@@ -44,9 +46,8 @@ class _PlayQuizState extends State<PlayQuiz> {
           ? const Center(
               child: SizedBox(
                 width: 250,
-                child: Text(
-                  'За този тест все още няма добавени въпроси.',
-                  style: TextStyle(fontSize: 22),
+                child: MyTextField(text: 'За този тест все още няма добавени въпроси.',
+                  fontSize: 22,
                 ),
               ),
             )
@@ -76,7 +77,7 @@ class _PlayQuizState extends State<PlayQuiz> {
         onPressed: (){
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) =>
-                  Results(result: ResultModel(_correct, _incorrct, _notAttempted, _questions.length))
+                  Results(result: ResultModel(widget.quizId, widget.currentUserMail, _correct, _incorrct, _notAttempted, _questions.length))
               )
           );
         },
@@ -105,11 +106,11 @@ class _QuizOptionsState extends State<QuizOptions> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "${widget.index + 1}. ${widget.question.question}",
-            style: TextStyle(fontSize: 22, color: Colors.black87),
+          MyTextField(
+            text: "${widget.index + 1}. ${widget.question.question}",
+            fontSize: 22,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           ...widget.question.options.asMap().entries.map((entry) {
@@ -129,7 +130,7 @@ class _QuizOptionsState extends State<QuizOptions> {
                       optionSelected: optionSelected,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                 ],

@@ -7,6 +7,7 @@ import 'package:quiz_maker/services/asset_service.dart';
 import 'package:quiz_maker/services/quizz_service.dart';
 import 'package:quiz_maker/services/auth_service.dart';
 
+import '../common/functions.dart';
 import '../components/app_bar.dart';
 import '../services/user_service.dart';
 import '../widgets/widgets.dart';
@@ -21,7 +22,7 @@ class CreateQuiz extends StatefulWidget {
 
 class _CreateQuizState extends State<CreateQuiz> {
   final _formKey = GlobalKey<FormState>();
-  late String quizTitle, quizDesc;
+  String quizTitle = "", quizDesc = "";
   File? quizImgFile;
   bool isLoading = false;
   QuizService databaseService = QuizService();
@@ -44,7 +45,7 @@ class _CreateQuizState extends State<CreateQuiz> {
       setState(() {
         isLoading = true;
       });
-      final currentUser = await authService.getCurrentUser();
+      final store = await LocalStore.getCurrentUserDetails();
 
       // Here we upload the image file and get the URL
       final imageUrl = await AssetService().uploadImage(quizImgFile!);
@@ -53,8 +54,9 @@ class _CreateQuizState extends State<CreateQuiz> {
           name: quizTitle,
           imgUrl: imageUrl,
           description: quizDesc,
-          creatorEmail: currentUser?.email ?? Constants.defaultMail,
-          likes: []
+          creatorEmail: store.email!,
+          likes: [],
+          solved: [],
       );
       await UserService().incrementPoints(0); // to activate streak
 
