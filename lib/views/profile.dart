@@ -87,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     _showEditModal(context, user);
                                   },
                                   icon: Icon(Icons.edit),
-                                  label: MyTextField(text: 'Edit Profile'),
+                                  label: MyTextField(text: 'Редактирай'),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.blue,
                                   ),
@@ -115,13 +115,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               MyTextField(
-                                text: 'Points: ${user?['points'] ?? 0}',
+                                text: 'Точки: ${user?['points'] ?? 0}',
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                               const SizedBox(height: 8),
                               MyTextField(
-                                text: 'Streak: ${getStreakCount(user)}',
+                                text: 'Активни дни: ${getStreakCount(user)}',
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -134,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           _showInviteFriendModal(context);
                         },
                         icon: Icon(Icons.mail_outline),
-                        label: MyTextField(text: 'Invite a Friend'),
+                        label: MyTextField(text: 'Покани приятел'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
                         ),
@@ -158,11 +158,11 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Invite a Friend'),
+          title: Text('Покани приятел'),
           content: TextField(
             controller: emailController,
             decoration: InputDecoration(
-              labelText: 'Enter friend\'s email',
+              labelText: 'Въведи неговия мейл',
               border: OutlineInputBorder(),
             ),
           ),
@@ -171,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: MyTextField(text: 'Cancel',),
+              child: MyTextField(text: 'Откажи',),
             ),
             ElevatedButton(
               onPressed: () {
@@ -181,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Navigator.of(context).pop();
                 }
               },
-              child: const MyTextField(text: 'Send Invitation'),
+              child: const MyTextField(text: 'Изпрати поканата'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                 )
@@ -210,7 +210,7 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const MyTextField(text: 'Edit Profile', fontSize: 20),
+          title: const MyTextField(text: 'Редакция на профил', fontSize: 20),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

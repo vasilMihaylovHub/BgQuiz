@@ -79,11 +79,9 @@ class RankingPage extends StatelessWidget {
     } else if (rank == 3) {
       return const Icon(Icons.emoji_events, color: Colors.orange, size: 40);
     } else {
-      return CircleAvatar(
-        backgroundColor: Colors.grey.shade300,
-        child: MyTextField(text: rank.toString(),
-          fontWeight: FontWeight.bold,
-        ),
+      return Padding(
+        padding: const EdgeInsets.only(left: 10.0, right: 20),
+        child: MyTextField(text: rank.toString()),
       );
     }
   }

@@ -37,7 +37,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     Icons.home,
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
-                  title: Text("H O M E"),
+                  title: Text("Н А Ч А Л О"),
                   onTap: () {
                     Navigator.pop(context);
                   },
@@ -51,7 +51,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     Icons.person,
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
-                  title: Text("P R O F I L E"),
+                  title: Text("П Р О Ф И Л"),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -68,7 +68,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     Icons.shield,
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
-                  title: Text("R A N K I N G"),
+                  title: Text("К Л А С А Ц И Я"),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -86,7 +86,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 Icons.logout,
                 color: Theme.of(context).colorScheme.inversePrimary,
               ),
-              title: Text("L O G O U T"),
+              title: Text("О Т П И Ш И"),
               onTap: () {
                 logout(context);
               },
