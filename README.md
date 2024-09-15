@@ -1,23 +1,19 @@
-# quiz_maker
-
-A new Flutter project.
+# BgQuiz
+This game is designed to showcase what you know and help you improve in areas where you may be lacking
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
+- IDE (Integrated development environment) - Android Studio, Visual Studio Code or IntelliJ
+- Flutter SDK
+### Installation
 
-A few resources to get you started if this is your first Flutter project:
+### Configuration
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Contributing
+If you encounter any issues, I would be happy if you raised an issue so we can discuss it.
+instructions: https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-
-
-стриковете се държат в базата като се вкарва настоящата дата в масив
 
 
 
